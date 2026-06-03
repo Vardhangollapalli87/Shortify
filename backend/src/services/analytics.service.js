@@ -1,6 +1,8 @@
+const mongoose = require("mongoose");
 const Click = require("../models/click.model");
 const ShortUrl = require("../models/url.model");
 const logger = require("../config/logger");
+const AppError = require("../utils/app-error");
 const { getClientIp, getUserAgent } = require("../utils/request");
 const { hashValue } = require("../utils/token");
 
@@ -94,6 +96,188 @@ const collectRedirectAnalyticsAsync = ({ req, url }) => {
   });
 };
 
+const ensureOwnedUrl = async ({ userId, urlId }) => {
+  const url = await ShortUrl.findOne({ _id: urlId, userId }).lean();
+
+  if (!url) {
+    throw new AppError("You do not have access to this short link", 404, "LINK_NOT_FOUND");
+  }
+
+  return url;
+};
+
+const getOverviewAnalytics = async ({ userId }) => {
+  const [totalLinks, clicksSummary, topLink] = await Promise.all([
+    ShortUrl.countDocuments({ userId }),
+    Click.aggregate([
+      {
+        $lookup: {
+          from: "urls",
+          localField: "urlId",
+          foreignField: "_id",
+          as: "url"
+        }
+      },
+      { $match: { "url.userId": new mongoose.Types.ObjectId(userId) } },
+      {
+        $group: {
+          _id: null,
+          totalClicks: { $sum: 1 },
+          uniqueVisitors: { $addToSet: "$ipHash" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalClicks: 1,
+          uniqueVisitors: { $size: "$uniqueVisitors" }
+        }
+      }
+    ]),
+    ShortUrl.find({ userId }).sort({ totalClicks: -1, lastClickedAt: -1 }).limit(1).lean()
+  ]);
+
+  const summary = clicksSummary[0] || { totalClicks: 0, uniqueVisitors: 0 };
+
+  return {
+    totalLinks,
+    totalClicks: summary.totalClicks,
+    uniqueVisitors: summary.uniqueVisitors,
+    topLink: topLink[0]
+      ? {
+          id: topLink[0]._id.toString(),
+          shortCode: topLink[0].shortCode,
+          originalUrl: topLink[0].originalUrl,
+          totalClicks: topLink[0].totalClicks || 0
+        }
+      : null
+  };
+};
+
+const getTopLinksAnalytics = async ({ userId }) => {
+  const links = await ShortUrl.find({ userId })
+    .sort({ totalClicks: -1, lastClickedAt: -1 })
+    .limit(10)
+    .lean();
+
+  return links.map((link) => ({
+    id: link._id.toString(),
+    shortCode: link.shortCode,
+    originalUrl: link.originalUrl,
+    totalClicks: link.totalClicks || 0
+  }));
+};
+
+const getUrlSummaryAnalytics = async ({ userId, urlId }) => {
+  await ensureOwnedUrl({ userId, urlId });
+
+  const [summary] = await Click.aggregate([
+    { $match: { userId: new mongoose.Types.ObjectId(userId), urlId: new mongoose.Types.ObjectId(urlId) } },
+    {
+      $group: {
+        _id: null,
+        totalClicks: { $sum: 1 },
+        uniqueVisitors: { $addToSet: "$ipHash" },
+        lastClickedAt: { $max: "$clickedAt" }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        totalClicks: 1,
+        uniqueVisitors: { $size: "$uniqueVisitors" },
+        lastClickedAt: 1
+      }
+    }
+  ]);
+
+  return summary || { totalClicks: 0, uniqueVisitors: 0, lastClickedAt: null };
+};
+
+const getUrlTimeseriesAnalytics = async ({ userId, urlId, startDate, endDate }) => {
+  await ensureOwnedUrl({ userId, urlId });
+
+  const start = startDate ? new Date(startDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const end = endDate ? new Date(endDate) : new Date();
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    throw new AppError("Invalid date range", 400, "INVALID_DATE_RANGE");
+  }
+
+  const data = await Click.aggregate([
+    {
+      $match: {
+        userId: new mongoose.Types.ObjectId(userId),
+        urlId: new mongoose.Types.ObjectId(urlId),
+        clickedAt: { $gte: start, $lte: end }
+      }
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: "$clickedAt" }
+        },
+        count: { $sum: 1 }
+      }
+    },
+    { $sort: { _id: 1 } },
+    {
+      $project: {
+        _id: 0,
+        date: "$_id",
+        count: 1
+      }
+    }
+  ]);
+
+  return {
+    startDate: start.toISOString(),
+    endDate: end.toISOString(),
+    interval: "day",
+    data
+  };
+};
+
+const getUrlBreakdownAnalytics = async ({ userId, urlId, fieldName }) => {
+  await ensureOwnedUrl({ userId, urlId });
+
+  const allowedFields = new Set(["browser", "device", "os", "referrerHost", "country"]);
+
+  if (!allowedFields.has(fieldName)) {
+    throw new AppError("Unsupported analytics breakdown", 400, "INVALID_BREAKDOWN_FIELD");
+  }
+
+  const pipeline = [
+    {
+      $match: {
+        userId: new mongoose.Types.ObjectId(userId),
+        urlId: new mongoose.Types.ObjectId(urlId)
+      }
+    },
+    {
+      $group: {
+        _id: `$${fieldName}`,
+        count: { $sum: 1 }
+      }
+    },
+    { $sort: { count: -1, _id: 1 } }
+  ];
+
+  const rows = await Click.aggregate(pipeline);
+  const total = rows.reduce((sum, entry) => sum + entry.count, 0);
+
+  return rows.map((entry) => ({
+    value: entry._id || "unknown",
+    count: entry.count,
+    percentage: total > 0 ? Number(((entry.count / total) * 100).toFixed(1)) : 0
+  }));
+};
+
 module.exports = {
-  collectRedirectAnalyticsAsync
+  collectRedirectAnalyticsAsync,
+  getOverviewAnalytics,
+  getTopLinksAnalytics,
+  getUrlSummaryAnalytics,
+  getUrlTimeseriesAnalytics,
+  getUrlBreakdownAnalytics
 };

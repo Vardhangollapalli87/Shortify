@@ -156,6 +156,17 @@ Phase 4 Complete
 Current Phase:
 Phase 5 Analytics
 
+Implemented analytics APIs:
+- GET /api/v1/analytics/overview
+- GET /api/v1/analytics/top-links
+- GET /api/v1/analytics/urls/:urlId/summary
+- GET /api/v1/analytics/urls/:urlId/timeseries
+- GET /api/v1/analytics/urls/:urlId/browsers
+- GET /api/v1/analytics/urls/:urlId/devices
+- GET /api/v1/analytics/urls/:urlId/os
+- GET /api/v1/analytics/urls/:urlId/referrers
+- GET /api/v1/analytics/urls/:urlId/countries
+
 Next:
 Frontend Dashboard
 Docker

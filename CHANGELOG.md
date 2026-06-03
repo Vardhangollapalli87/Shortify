@@ -71,6 +71,20 @@ Approved MVP preparation:
 
 Phase 5 Analytics Preparation Status: Completed
 
+Phase 5 Analytics APIs
+
+Implemented:
+
+* GET /api/v1/analytics/overview
+* GET /api/v1/analytics/top-links
+* GET /api/v1/analytics/urls/:urlId/summary
+* GET /api/v1/analytics/urls/:urlId/timeseries
+* GET /api/v1/analytics/urls/:urlId/browsers
+* GET /api/v1/analytics/urls/:urlId/devices
+* GET /api/v1/analytics/urls/:urlId/os
+* GET /api/v1/analytics/urls/:urlId/referrers
+* GET /api/v1/analytics/urls/:urlId/countries
+
 Rejected for MVP Phase 5:
 
 * `visitorKey`

@@ -329,7 +329,19 @@ Phase 5 Analytics Preparation Status:
 
 * Schema preparation completed for `country` and `referrerHost`
 * Analytics indexes prepared for MVP reporting queries
-* No analytics routes, controllers, or APIs implemented yet
+* Analytics API implementation is now in progress and routes are available under `/api/v1/analytics`
+
+New analytics API routes:
+
+* GET /api/v1/analytics/overview
+* GET /api/v1/analytics/top-links
+* GET /api/v1/analytics/urls/:urlId/summary
+* GET /api/v1/analytics/urls/:urlId/timeseries
+* GET /api/v1/analytics/urls/:urlId/browsers
+* GET /api/v1/analytics/urls/:urlId/devices
+* GET /api/v1/analytics/urls/:urlId/os
+* GET /api/v1/analytics/urls/:urlId/referrers
+* GET /api/v1/analytics/urls/:urlId/countries
 
 Do not redesign existing architecture.
 

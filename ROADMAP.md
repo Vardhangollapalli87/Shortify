@@ -17,7 +17,12 @@ Phase 5 preparation
 - [x] Add `referrerHost` field to click records
 - [x] Document MVP analytics scope in project docs
 
-Status: Analytics preparation completed. API implementation is next.
+Status: Analytics preparation completed. Analytics API implementation is now added under `/api/v1/analytics`.
+
+Implemented
+- JWT-protected analytics endpoints
+- Ownership-aware analytics queries
+- Aggregation-based summary, breakdown, and time-series responses
 
 Phase 5 implementation plan
 - Prepare analytics API endpoints and aggregation queries
