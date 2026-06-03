@@ -9,7 +9,15 @@ Completed
 
 Current
 ----------
-→ Phase 6A Frontend Foundation
+→ Phase 6B Dashboard MVP
+
+Dashboard MVP completed:
+- Protected /dashboard route
+- React Query integration with /api/v1/analytics/overview and /api/v1/analytics/top-links
+- KPI cards and top links table
+- Reusable loading, empty, and error states
+
+Status: Dashboard MVP is implemented. Analytics charts, links page, and settings page remain out of scope for this phase.
 
 Frontend foundation completed:
 - React + JavaScript + Vite

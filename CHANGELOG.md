@@ -58,6 +58,26 @@ Implemented:
 
 ---
 
+## Phase 6B - Dashboard MVP
+
+Status: Complete
+
+Implemented:
+
+* Protected /dashboard route
+* Dashboard overview page
+* Reusable dashboard components: DashboardHeader, StatCard, TopLinksTable, LoadingSkeleton, EmptyState, ErrorState
+* React Query integration for /api/v1/analytics/overview and /api/v1/analytics/top-links
+
+Scope for this phase:
+
+* Dashboard MVP only
+* No analytics charts yet
+* No links page yet
+* No settings page yet
+
+---
+
 ## Phase 6A - Frontend Foundation
 
 Status: Complete
