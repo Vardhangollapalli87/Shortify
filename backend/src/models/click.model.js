@@ -5,19 +5,16 @@ const clickSchema = new mongoose.Schema(
     urlId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ShortUrl",
-      required: true,
-      index: true
+      required: true
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
-      index: true
+      required: true
     },
     shortCode: {
       type: String,
-      required: true,
-      index: true
+      required: true
     },
     ipHash: {
       type: String,
@@ -30,6 +27,14 @@ const clickSchema = new mongoose.Schema(
     referrer: {
       type: String,
       default: null
+    },
+    referrerHost: {
+      type: String,
+      default: null
+    },
+    country: {
+      type: String,
+      default: "unknown"
     },
     device: {
       type: String,
@@ -45,8 +50,7 @@ const clickSchema = new mongoose.Schema(
     },
     clickedAt: {
       type: Date,
-      default: Date.now,
-      index: true
+      default: Date.now
     }
   },
   {
@@ -57,6 +61,13 @@ const clickSchema = new mongoose.Schema(
 
 clickSchema.index({ urlId: 1, clickedAt: -1 });
 clickSchema.index({ userId: 1, clickedAt: -1 });
+clickSchema.index({ userId: 1, urlId: 1, clickedAt: -1 });
+clickSchema.index({ shortCode: 1, clickedAt: -1 });
+clickSchema.index({ urlId: 1, browser: 1, clickedAt: -1 });
+clickSchema.index({ urlId: 1, device: 1, clickedAt: -1 });
+clickSchema.index({ urlId: 1, os: 1, clickedAt: -1 });
+clickSchema.index({ urlId: 1, country: 1, clickedAt: -1 });
+clickSchema.index({ urlId: 1, referrerHost: 1, clickedAt: -1 });
 
 const Click = mongoose.model("Click", clickSchema);
 

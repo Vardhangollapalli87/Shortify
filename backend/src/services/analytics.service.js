@@ -42,9 +42,27 @@ const parseUserAgent = (userAgent = "") => {
   };
 };
 
+const getReferrerHost = (referrer = "") => {
+  try {
+    return new URL(referrer).hostname.toLowerCase() || null;
+  } catch {
+    return null;
+  }
+};
+
+const getCountry = (req) => {
+  const country = req.headers["x-country"]
+    || req.headers["cf-ipcountry"]
+    || req.headers["x-vercel-ip-country"]
+    || "unknown";
+
+  return typeof country === "string" ? country.toUpperCase() : "unknown";
+};
+
 const collectRedirectAnalytics = async ({ req, url }) => {
   const userAgent = getUserAgent(req);
   const parsedUserAgent = parseUserAgent(userAgent);
+  const referrer = req.get("referer") || req.get("referrer") || null;
 
   await Promise.all([
     Click.create({
@@ -53,7 +71,9 @@ const collectRedirectAnalytics = async ({ req, url }) => {
       shortCode: url.shortCode,
       ipHash: hashValue(getClientIp(req)),
       userAgent,
-      referrer: req.get("referer") || req.get("referrer") || null,
+      referrer,
+      referrerHost: getReferrerHost(referrer),
+      country: getCountry(req),
       ...parsedUserAgent
     }),
     ShortUrl.updateOne(
