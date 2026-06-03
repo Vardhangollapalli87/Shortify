@@ -9,7 +9,24 @@ Completed
 
 Current
 ----------
-→ Analytics System (MVP)
+→ Phase 6A Frontend Foundation
+
+Frontend foundation completed:
+- React + JavaScript + Vite
+- Tailwind CSS
+- React Router
+- Axios client
+- TanStack Query
+- Auth provider + protected routing
+- App shell + sidebar + navbar + protected layout
+
+Status: Frontend foundation is in place. Dashboard, analytics, and settings UI remain out of scope for this phase.
+
+Next
+----------
+→ Analytics UI
+→ Links UI
+→ Settings UI
 
 Phase 5 preparation
 - [x] Add approved analytics indexes to click collection

@@ -58,6 +58,29 @@ Implemented:
 
 ---
 
+## Phase 6A - Frontend Foundation
+
+Status: Complete
+
+Implemented:
+
+* JavaScript-only frontend setup for React + Vite
+* Tailwind CSS integration
+* React Router structure
+* Axios client and JWT-aware auth headers
+* TanStack Query provider
+* Auth context, protected route, and protected layout
+* App shell with sidebar and navbar
+
+Scope for this phase:
+
+* Foundation only
+* No dashboard pages yet
+* No analytics UI yet
+* No settings UI yet
+
+---
+
 ## Phase 5 - Analytics
 
 Status: In Progress
