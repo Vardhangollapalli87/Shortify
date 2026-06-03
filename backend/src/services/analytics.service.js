@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Click = require("../models/click.model");
+const MAX_ANALYTICS_RANGE_DAYS = 365;
 const ShortUrl = require("../models/url.model");
 const logger = require("../config/logger");
 const AppError = require("../utils/app-error");
@@ -96,7 +97,36 @@ const collectRedirectAnalyticsAsync = ({ req, url }) => {
   });
 };
 
+const validateUrlId = (urlId) => {
+  if (!mongoose.Types.ObjectId.isValid(urlId)) {
+    throw new AppError("Invalid resource identifier", 400, "INVALID_IDENTIFIER");
+  }
+};
+
+const validateDateRange = ({ startDate, endDate }) => {
+  const start = startDate ? new Date(startDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const end = endDate ? new Date(endDate) : new Date();
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    throw new AppError("Invalid date range", 400, "INVALID_DATE_RANGE");
+  }
+
+  if (start > end) {
+    throw new AppError("Start date cannot be after end date", 400, "INVALID_DATE_RANGE");
+  }
+
+  const diffInDays = (end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000);
+
+  if (diffInDays > MAX_ANALYTICS_RANGE_DAYS) {
+    throw new AppError("Date range exceeds the maximum allowed period", 400, "DATE_RANGE_EXCEEDED");
+  }
+
+  return { start, end };
+};
+
 const ensureOwnedUrl = async ({ userId, urlId }) => {
+  validateUrlId(urlId);
+
   const url = await ShortUrl.findOne({ _id: urlId, userId }).lean();
 
   if (!url) {
@@ -110,15 +140,7 @@ const getOverviewAnalytics = async ({ userId }) => {
   const [totalLinks, clicksSummary, topLink] = await Promise.all([
     ShortUrl.countDocuments({ userId }),
     Click.aggregate([
-      {
-        $lookup: {
-          from: "urls",
-          localField: "urlId",
-          foreignField: "_id",
-          as: "url"
-        }
-      },
-      { $match: { "url.userId": new mongoose.Types.ObjectId(userId) } },
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
       {
         $group: {
           _id: null,
@@ -197,12 +219,7 @@ const getUrlSummaryAnalytics = async ({ userId, urlId }) => {
 const getUrlTimeseriesAnalytics = async ({ userId, urlId, startDate, endDate }) => {
   await ensureOwnedUrl({ userId, urlId });
 
-  const start = startDate ? new Date(startDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const end = endDate ? new Date(endDate) : new Date();
-
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-    throw new AppError("Invalid date range", 400, "INVALID_DATE_RANGE");
-  }
+  const { start, end } = validateDateRange({ startDate, endDate });
 
   const data = await Click.aggregate([
     {

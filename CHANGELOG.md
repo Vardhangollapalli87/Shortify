@@ -75,6 +75,10 @@ Phase 5 Analytics APIs
 
 Implemented:
 
+* Added analytics date-range validation for `startDate`, `endDate`, and maximum allowed range
+* Added `urlId` validation for analytics resource access
+* Simplified analytics overview aggregation to use `Click.userId` directly
+
 * GET /api/v1/analytics/overview
 * GET /api/v1/analytics/top-links
 * GET /api/v1/analytics/urls/:urlId/summary
