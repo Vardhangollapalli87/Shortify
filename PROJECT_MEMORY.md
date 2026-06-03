@@ -305,7 +305,20 @@ Must prioritize backend quality over feature quantity.
 
 # Current Phase
 
-Phase 6B - Dashboard MVP ✅
+Phase 6C - Links Management Page ✅
+
+Implemented:
+
+* Protected /links route
+* Links management page with React Query
+* Link table, link row, modal form, delete confirmation, copy button, status badge, and action controls
+* Link creation, editing, deletion, and active/inactive toggle flows
+
+Scope for this phase:
+
+* Links management page only
+* No analytics charts yet
+* No settings page yet
 
 Implemented:
 

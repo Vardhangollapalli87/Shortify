@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import OAuthCallback from './pages/OAuthCallback';
 import Dashboard from './pages/Dashboard';
+import LinksPage from './pages/Links';
 
 export default function App() {
   return (
@@ -23,6 +24,16 @@ export default function App() {
         }
       >
         <Route index element={<Dashboard />} />
+      </Route>
+      <Route
+        path="/links"
+        element={
+          <ProtectedRoute>
+            <ProtectedLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<LinksPage />} />
       </Route>
       <Route
         path="/app/*"

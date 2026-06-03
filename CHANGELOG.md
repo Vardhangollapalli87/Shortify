@@ -58,6 +58,25 @@ Implemented:
 
 ---
 
+## Phase 6C - Links Management Page
+
+Status: Complete
+
+Implemented:
+
+* Protected /links route
+* Links page with React Query list and mutation flows
+* Reusable components: LinkTable, LinkRow, LinkFormModal, LinkActions, ConfirmDeleteModal, CopyButton, StatusBadge
+* Create, edit, delete, toggle, and copy actions for user-owned short links
+
+Scope for this phase:
+
+* Links management page only
+* No analytics charts yet
+* No settings page yet
+
+---
+
 ## Phase 6B - Dashboard MVP
 
 Status: Complete

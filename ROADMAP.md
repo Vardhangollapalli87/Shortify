@@ -9,7 +9,15 @@ Completed
 
 Current
 ----------
-→ Phase 6B Dashboard MVP
+→ Phase 6C Links Management Page
+
+Links management page completed:
+- Protected /links route
+- React Query integration for user links and link mutations
+- Create, edit, delete, toggle, and copy actions
+- Reusable modal and table components
+
+Status: Links management page is implemented. Analytics charts and settings page remain out of scope for this phase.
 
 Dashboard MVP completed:
 - Protected /dashboard route
