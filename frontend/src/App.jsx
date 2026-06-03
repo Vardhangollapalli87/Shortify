@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import OAuthCallback from './pages/OAuthCallback';
 import Dashboard from './pages/Dashboard';
 import LinksPage from './pages/Links';
+import AnalyticsPage from './pages/Analytics';
 
 export default function App() {
   return (
@@ -36,6 +37,16 @@ export default function App() {
         <Route index element={<LinksPage />} />
       </Route>
       <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <ProtectedLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AnalyticsPage />} />
+      </Route>
+      <Route
         path="/app/*"
         element={
           <ProtectedRoute>
@@ -44,8 +55,8 @@ export default function App() {
         }
       >
         <Route index element={<div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-slate-200">Workspace overview placeholder.</div>} />
-        <Route path="links" element={<div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-slate-200">Links page placeholder.</div>} />
-        <Route path="analytics" element={<div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-slate-200">Analytics page placeholder.</div>} />
+        <Route path="links" element={<AnalyticsPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="settings" element={<div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-slate-200">Settings page placeholder.</div>} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
