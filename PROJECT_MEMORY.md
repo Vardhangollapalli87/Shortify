@@ -307,6 +307,54 @@ Must prioritize backend quality over feature quantity.
 
 # Current Phase
 
+Phase 6E.2 - User Experience & Session Hardening ✅
+
+Audit Findings:
+
+Critical Bugs:
+
+* Password-protected backend redirects return `LINK_PASSWORD_REQUIRED`, but browser users do not get a friendly password challenge.
+* Existing password-protected links cannot be cleanly unprotected from the edit form because blank password input is treated as "leave unchanged".
+* OAuth callback and AuthProvider initialization can issue unnecessary refresh calls, which can rotate refresh tokens more than once.
+
+High Priority Improvements:
+
+* Login/register flows need immediate auth-state reliability after successful credential or OAuth auth.
+* Frontend API errors need centralized mapping from backend error codes to user-friendly messages.
+* Rate-limit and auth errors need friendly retry guidance instead of raw backend text.
+* URL forms need frontend validation for URL, alias, password, and expiration constraints.
+
+Medium Priority Improvements:
+
+* Landing page is placeholder quality and needs a professional SaaS first screen.
+* Dashboard needs improved hierarchy, KPI presentation, and release-ready wording.
+* Links management needs search, sort, filter, improved actions, copy feedback, and a details view.
+
+Implementation Roadmap:
+
+1. Add centralized frontend API error mapping.
+2. Dedupe AuthProvider session restoration and make OAuth/credentials state updates consistent.
+3. Add frontend password challenge route for protected short links.
+4. Redirect protected-link password errors from backend to the frontend challenge page for browser users.
+5. Add explicit password keep/update/remove behavior in the Links edit form.
+6. Add frontend form validation.
+7. Improve landing, dashboard, and links management UX without adding QR, deployment, or Phase 7 scope.
+
+Implemented:
+
+* Added centralized frontend API error mapping for backend error codes and rate-limit guidance.
+* Added shared refresh-session dedupe in AuthProvider to prevent duplicate refresh-token rotation.
+* Added public password challenge page for password-protected short links.
+* Backend redirects password-required and invalid-password browser flows to the frontend challenge page.
+* Link edit form now supports keep, set/change, and remove password protection.
+* Added frontend validation for original URL, custom alias, password length, and expiration date.
+* Links management now supports search, status filters, sorting, details view, and copy feedback.
+* Landing page updated from placeholder to release-ready SaaS positioning.
+* Dashboard wording and KPI presentation improved for release polish.
+* Added password removal verification script.
+
+---
+
 Phase 6E.1 - Critical Product Hardening ✅
 
 Implemented:

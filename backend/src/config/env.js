@@ -42,6 +42,7 @@ const env = {
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
   refreshTokenCookieName: process.env.REFRESH_TOKEN_COOKIE_NAME || "shortify_refresh_token",
   cookieDomain: process.env.COOKIE_DOMAIN || undefined,
+  clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
   passwordResetTokenExpiresMinutes: parseNumber(process.env.PASSWORD_RESET_TOKEN_EXPIRES_MINUTES, 15),
   clientPasswordResetUrl: process.env.CLIENT_PASSWORD_RESET_URL || "http://localhost:5173/reset-password",
   googleClientId: process.env.GOOGLE_CLIENT_ID,

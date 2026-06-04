@@ -1,6 +1,6 @@
 import { LinkRow } from './LinkRow';
 
-export const LinkTable = ({ links, onEdit, onDelete, onToggle, onView }) => (
+export const LinkTable = ({ links, onEdit, onDelete, onToggle, onView, onCopy, onCopyError }) => (
   <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/20">
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
@@ -33,6 +33,8 @@ export const LinkTable = ({ links, onEdit, onDelete, onToggle, onView }) => (
               onDelete={() => onDelete(link)}
               onToggle={() => onToggle(link)}
               onView={() => onView(link)}
+              onCopy={onCopy}
+              onCopyError={onCopyError}
             />
           ))}
         </tbody>

@@ -7,9 +7,9 @@ export const StatCard = ({ label, value, hint, accent = 'cyan' }) => {
   };
 
   return (
-    <article className={`rounded-3xl border bg-gradient-to-br ${accentClasses[accent]} p-6 shadow-xl shadow-black/20`}>
+    <article className={`rounded-2xl border bg-gradient-to-br ${accentClasses[accent]} p-6 shadow-xl shadow-black/20`}>
       <p className="text-sm uppercase tracking-[0.25em] text-slate-300">{label}</p>
-      <p className="mt-4 text-3xl font-semibold text-white">{value}</p>
+      <p className="mt-4 break-words text-3xl font-semibold text-white">{value}</p>
       <p className="mt-2 text-sm text-slate-300">{hint}</p>
     </article>
   );

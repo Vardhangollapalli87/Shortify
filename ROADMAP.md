@@ -7,6 +7,7 @@ Completed
 ✓ Google OAuth
 ✓ Redirect Engine
 ✓ Phase 6E.1 Critical Product Hardening
+✓ Phase 6E.2 User Experience & Session Hardening
 
 Phase 6E.1 completed:
 - Google OAuth is visible on Login and Register pages.
@@ -28,6 +29,29 @@ Known Issues Resolved:
 Current
 ----------
 → Phase 6E Product Hardening
+
+Phase 6E.2 audit:
+- Critical Bugs: protected-link UX missing, password removal incomplete, refresh restoration can run unnecessarily more than once.
+- High Priority Improvements: auth state reliability, API error mapping, rate-limit guidance, frontend validation.
+- Medium Priority Improvements: landing page, dashboard hierarchy, links search/sort/filter/details/copy UX.
+
+Phase 6E.2 implementation order:
+1. Centralized frontend API error mapper
+2. Session restoration dedupe and auth-state consistency
+3. Password-protected link challenge flow
+4. Password removal behavior
+5. Frontend validation
+6. Links management UX hardening
+7. Landing and dashboard UX hardening
+
+Phase 6E.2 completed:
+- Password-protected links now route browser users through a friendly password challenge.
+- Password removal is explicit in the edit form.
+- AuthProvider dedupes refresh restoration to reduce unnecessary refresh-token rotations.
+- Frontend API errors are mapped to user-friendly messages.
+- URL creation/editing has client-side validation.
+- Links management includes search, sort, filters, details, and copy feedback.
+- Landing and dashboard copy/presentation are release-hardened.
 
 Links management page completed:
 - Protected /links route

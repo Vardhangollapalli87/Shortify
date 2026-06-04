@@ -1,5 +1,40 @@
 # CHANGELOG
 
+## Phase 6E.2 - User Experience & Session Hardening
+
+Status: Complete
+
+Audit:
+
+* Critical Bugs: password-protected link UX, password removal, duplicate refresh restoration risk
+* High Priority Improvements: auth-state reliability, API error mapping, rate-limit guidance, frontend validation
+* Medium Priority Improvements: landing page polish, dashboard UX polish, links management UX polish
+
+Implementation Roadmap:
+
+* Centralize frontend API error mapping
+* Dedupe session restoration and align OAuth/credentials auth-state behavior
+* Add password challenge flow for protected links
+* Add explicit password removal support
+* Add frontend URL form validation
+* Improve links management search/sort/filter/details/copy UX
+* Improve landing and dashboard presentation
+
+Implemented:
+
+* Added centralized frontend API error mapper
+* Added AuthProvider refresh-session dedupe
+* Added password challenge page for protected short links
+* Redirected protected-link password errors to the frontend challenge page
+* Added explicit password keep, set/change, and remove options in link editing
+* Added frontend validation for URL, alias, password, and expiration date
+* Added Links management search, status filter, sorting, details view, and copy feedback
+* Updated Landing page to professional SaaS messaging
+* Improved Dashboard labels and KPI presentation
+* Added password removal verification script
+
+---
+
 ## Phase 6E.1 - Critical Product Hardening
 
 Status: Complete

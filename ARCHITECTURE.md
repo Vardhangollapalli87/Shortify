@@ -118,6 +118,43 @@ Verified cases include active, disabled, expired, missing, password-protected, a
 
 ---
 
+## Phase 6E.2 Audit
+
+Critical Bugs:
+- Password-protected links need a frontend browser challenge instead of raw JSON.
+- Password removal must be explicit in link editing.
+- Refresh-token restoration must avoid duplicate rotations.
+
+High Priority Improvements:
+- Centralized frontend API error mapping.
+- Friendly rate-limit and auth-error messages.
+- Immediate auth state after credentials and OAuth auth.
+- Client-side validation for URL management.
+
+Medium Priority Improvements:
+- Landing page release polish.
+- Dashboard hierarchy and empty/loading state polish.
+- Links search, sort, filter, copy feedback, and details view.
+
+Implementation roadmap:
+1. API error mapper
+2. Session restoration dedupe
+3. Password challenge route
+4. Password removal controls
+5. Validation
+6. Links UX hardening
+7. Landing/dashboard polish
+
+Implemented in Phase 6E.2:
+- Frontend API error mapping lives in `frontend/src/lib/apiErrors.js`.
+- AuthProvider dedupes refresh restoration with a shared in-flight promise.
+- Password challenge route: `/links/password/:shortCode`.
+- Backend password redirect errors route browser users to the frontend challenge page.
+- Link editing supports explicit password keep, set/change, and remove states.
+- Links management includes search, filter, sort, copy feedback, and details view.
+
+---
+
 ## Analytics
 
 MVP analytics scope:

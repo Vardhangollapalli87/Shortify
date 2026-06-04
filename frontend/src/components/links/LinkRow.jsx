@@ -14,7 +14,7 @@ const formatDate = (value) => {
   });
 };
 
-export const LinkRow = ({ link, onEdit, onDelete, onToggle, onView }) => (
+export const LinkRow = ({ link, onEdit, onDelete, onToggle, onView, onCopy, onCopyError }) => (
   <tr className="border-b border-slate-800 align-top text-sm text-slate-200 last:border-b-0 hover:bg-slate-800/70">
     <td className="px-4 py-4">
       <div className="flex flex-col gap-1">
@@ -34,7 +34,7 @@ export const LinkRow = ({ link, onEdit, onDelete, onToggle, onView }) => (
     <td className="px-4 py-4 text-slate-300">{formatLocalDateTime(link.expiresAt)}</td>
     <td className="px-4 py-4">
       <div className="flex flex-wrap items-center gap-3">
-        <CopyButton value={buildShortLink(link.shortCode)} />
+        <CopyButton value={buildShortLink(link.shortCode)} onCopy={onCopy} onError={onCopyError} />
         <LinkActions onEdit={onEdit} onDelete={onDelete} onToggle={onToggle} onView={onView} isActive={link.isActive} />
       </div>
     </td>

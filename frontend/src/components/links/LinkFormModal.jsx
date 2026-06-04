@@ -6,11 +6,49 @@ const initialForm = {
   shortCode: '',
   title: '',
   expiresAt: '',
-  password: ''
+  password: '',
+  passwordMode: 'keep'
+};
+
+const validateForm = ({ form, mode }) => {
+  const errors = {};
+
+  try {
+    const url = new URL(form.originalUrl);
+
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      errors.originalUrl = 'Use an http:// or https:// URL.';
+    }
+  } catch {
+    errors.originalUrl = 'Enter a valid URL that starts with http:// or https://.';
+  }
+
+  if (form.shortCode && !/^[a-zA-Z0-9_-]{3,32}$/.test(form.shortCode.trim())) {
+    errors.shortCode = 'Use 3-32 letters, numbers, underscores, or hyphens.';
+  }
+
+  if (form.expiresAt) {
+    const expiration = new Date(form.expiresAt);
+
+    if (Number.isNaN(expiration.getTime()) || expiration.getTime() <= Date.now()) {
+      errors.expiresAt = 'Choose a future expiration date.';
+    }
+  }
+
+  const shouldValidatePassword = mode === 'create'
+    ? Boolean(form.password)
+    : form.passwordMode === 'set';
+
+  if (shouldValidatePassword && form.password.trim().length < 4) {
+    errors.password = 'Use at least 4 characters for the link password.';
+  }
+
+  return errors;
 };
 
 export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit }) => {
   const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (isOpen && link) {
@@ -19,13 +57,16 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
         shortCode: link.shortCode || '',
         title: link.title || '',
         expiresAt: isoToLocalDateTimeInput(link.expiresAt),
-        password: ''
+        password: '',
+        passwordMode: 'keep'
       });
+      setErrors({});
       return;
     }
 
     if (isOpen) {
       setForm(initialForm);
+      setErrors({});
     }
   }, [isOpen, link]);
 
@@ -36,11 +77,33 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
   const submit = (event) => {
     event.preventDefault();
 
-    onSubmit({
-      ...form,
+    const nextErrors = validateForm({ form, mode });
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    const payload = {
+      originalUrl: form.originalUrl.trim(),
+      shortCode: form.shortCode.trim(),
+      title: form.title.trim(),
       expiresAt: localDateTimeInputToIso(form.expiresAt),
-      password: form.password || undefined
-    });
+    };
+
+    if (mode === 'create' && form.password.trim()) {
+      payload.password = form.password;
+    }
+
+    if (mode === 'edit' && form.passwordMode === 'set') {
+      payload.password = form.password;
+    }
+
+    if (mode === 'edit' && form.passwordMode === 'remove') {
+      payload.password = '';
+    }
+
+    onSubmit(payload);
   };
 
   return (
@@ -60,10 +123,12 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
             <label className="space-y-2 text-sm text-slate-200">
               <span>Original URL</span>
               <input value={form.originalUrl} onChange={(event) => setForm({ ...form, originalUrl: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" placeholder="https://example.com" required />
+              {errors.originalUrl ? <span className="block text-xs text-rose-300">{errors.originalUrl}</span> : null}
             </label>
             <label className="space-y-2 text-sm text-slate-200">
               <span>Custom Alias</span>
               <input value={form.shortCode} onChange={(event) => setForm({ ...form, shortCode: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" placeholder="my-link" />
+              {errors.shortCode ? <span className="block text-xs text-rose-300">{errors.shortCode}</span> : null}
             </label>
           </div>
           <label className="space-y-2 text-sm text-slate-200">
@@ -75,10 +140,30 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
               <span>Expiration Date</span>
               <input type="datetime-local" value={form.expiresAt} onChange={(event) => setForm({ ...form, expiresAt: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" />
               <span className="block text-xs text-slate-400">{form.expiresAt ? `Local time: ${formatLocalDateTime(localDateTimeInputToIso(form.expiresAt))}` : 'No expiration set'}</span>
+              {errors.expiresAt ? <span className="block text-xs text-rose-300">{errors.expiresAt}</span> : null}
             </label>
             <label className="space-y-2 text-sm text-slate-200">
               <span>Password Protection</span>
-              <input type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" placeholder="Optional password" />
+              {mode === 'edit' ? (
+                <div className="grid gap-2 rounded-2xl border border-slate-800 bg-slate-900 p-3">
+                  <label className="flex items-center gap-2 text-xs text-slate-300">
+                    <input type="radio" name="passwordMode" checked={form.passwordMode === 'keep'} onChange={() => setForm({ ...form, passwordMode: 'keep', password: '' })} />
+                    Keep current password state
+                  </label>
+                  <label className="flex items-center gap-2 text-xs text-slate-300">
+                    <input type="radio" name="passwordMode" checked={form.passwordMode === 'set'} onChange={() => setForm({ ...form, passwordMode: 'set' })} />
+                    Set or change password
+                  </label>
+                  <label className="flex items-center gap-2 text-xs text-slate-300">
+                    <input type="radio" name="passwordMode" checked={form.passwordMode === 'remove'} onChange={() => setForm({ ...form, passwordMode: 'remove', password: '' })} />
+                    Remove password protection
+                  </label>
+                </div>
+              ) : null}
+              {(mode === 'create' || form.passwordMode === 'set') ? (
+                <input type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" placeholder="Optional password" />
+              ) : null}
+              {errors.password ? <span className="block text-xs text-rose-300">{errors.password}</span> : null}
             </label>
           </div>
 

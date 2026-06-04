@@ -59,25 +59,25 @@ export default function Dashboard() {
         <StatCard
           label="Total Links"
           value={overview?.totalLinks ?? 0}
-          hint="Number of short links in your workspace"
+          hint="Managed links in this workspace"
           accent="cyan"
         />
         <StatCard
           label="Total Clicks"
           value={overview?.totalClicks ?? 0}
-          hint="All recorded click events across your links"
+          hint="Recorded redirects across all links"
           accent="emerald"
         />
         <StatCard
           label="Unique Visitors"
           value={overview?.uniqueVisitors ?? 0}
-          hint="Distinct visitors identified by analytics data"
+          hint="Distinct visitors identified from click data"
           accent="violet"
         />
         <StatCard
           label="Top Performing Link"
           value={topLinkLabel}
-          hint="Your strongest short link by total clicks"
+          hint="Highest traffic link by clicks"
           accent="amber"
         />
       </section>
