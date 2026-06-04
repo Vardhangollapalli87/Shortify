@@ -16,6 +16,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/auth/callback" element={<OAuthCallback />} />
+      <Route path="/auth/oauth/callback" element={<OAuthCallback />} />
       <Route
         path="/dashboard"
         element={
@@ -55,7 +56,7 @@ export default function App() {
         }
       >
         <Route index element={<div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-slate-200">Workspace overview placeholder.</div>} />
-        <Route path="links" element={<AnalyticsPage />} />
+        <Route path="links" element={<LinksPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="settings" element={<div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-slate-200">Settings page placeholder.</div>} />
       </Route>

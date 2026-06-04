@@ -1,5 +1,36 @@
 # CHANGELOG
 
+## Phase 6E.1 - Critical Product Hardening
+
+Status: Complete
+
+Implemented:
+
+* Added visible Google OAuth actions to Login and Register pages
+* Aligned OAuth success callback default to `/auth/callback`
+* Added frontend compatibility route for `/auth/oauth/callback`
+* Added AuthProvider session restoration for OAuth completion
+* Added OAuth failure handling on the Login page
+* Added `VITE_SHORT_LINK_BASE_URL` for canonical copied short links
+* Updated copied short links to use the backend/public redirect origin
+* Fixed expiration editing from stored UTC to local datetime input
+* Fixed expiration saving from local datetime input back to UTC
+* Added local expiration display in Links management
+* Fixed `/app/links` to render Links management instead of Analytics
+* Added redirect engine verification script
+* Added redirect verification documentation
+
+Known Issues Resolved:
+
+* Google OAuth was not visible from frontend auth pages
+* OAuth callback default route was misaligned
+* Copy Link generated frontend-origin URLs
+* Expiration date appeared incorrect after save
+* `/app/links` routed to the wrong page
+* Redirect engine had no repeatable local verification command
+
+---
+
 ## Phase 1 - Backend Foundation
 
 Status: Complete

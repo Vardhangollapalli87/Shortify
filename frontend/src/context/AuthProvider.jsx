@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import api from '../lib/axios';
 
 const AuthContext = createContext(null);
@@ -8,28 +8,35 @@ export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(localStorage.getItem('shortify_access_token'));
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const restoreSession = async () => {
-      try {
-        const response = await api.post('/auth/refresh');
-        const nextToken = response.data?.data?.accessToken ?? null;
+  const restoreSession = useCallback(async () => {
+    try {
+      const response = await api.post('/auth/refresh');
+      const nextToken = response.data?.data?.accessToken ?? null;
 
-        if (nextToken) {
-          localStorage.setItem('shortify_access_token', nextToken);
-          setAccessToken(nextToken);
-          setUser(response.data?.data?.user ?? null);
-        }
-      } catch {
-        localStorage.removeItem('shortify_access_token');
-        setAccessToken(null);
-        setUser(null);
-      } finally {
-        setLoading(false);
+      if (nextToken) {
+        localStorage.setItem('shortify_access_token', nextToken);
+        setAccessToken(nextToken);
+        setUser(response.data?.data?.user ?? null);
+        return response.data?.data ?? null;
       }
-    };
 
-    restoreSession();
+      localStorage.removeItem('shortify_access_token');
+      setAccessToken(null);
+      setUser(null);
+      return null;
+    } catch {
+      localStorage.removeItem('shortify_access_token');
+      setAccessToken(null);
+      setUser(null);
+      return null;
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    restoreSession();
+  }, [restoreSession]);
 
   const login = async (credentials) => {
     const response = await api.post('/auth/login', credentials);
@@ -68,8 +75,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = useMemo(
-    () => ({ user, accessToken, loading, login, register, logout }),
-    [accessToken, loading, login, logout, register, user]
+    () => ({ user, accessToken, loading, login, register, logout, restoreSession }),
+    [accessToken, loading, login, logout, register, restoreSession, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

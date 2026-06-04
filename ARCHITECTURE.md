@@ -68,6 +68,26 @@ JWT Access Token
 
 Refresh Token Rotation
 
+OAuth completion:
+- Backend Google OAuth callback: `/api/v1/auth/google/callback`
+- Frontend OAuth completion route: `/auth/callback`
+- Login/Register expose Google OAuth entry points.
+- AuthProvider restores the refresh-token cookie into a frontend access-token session after OAuth callback.
+
+---
+
+## Short Link Origin
+
+Frontend copied short links use:
+
+`VITE_SHORT_LINK_BASE_URL`
+
+Local default:
+
+`http://localhost:5000`
+
+This keeps copied links pointed at the backend/public redirect origin instead of the frontend application origin.
+
 ---
 
 ## Redirect Flow
@@ -89,6 +109,12 @@ Redirect
 ↓
 
 Async Analytics Collection
+
+Redirect verification:
+- `backend/scripts/verify-redirect-engine.js`
+- `backend/docs/redirect-verification.md`
+
+Verified cases include active, disabled, expired, missing, password-protected, and analytics collection flows.
 
 ---
 
@@ -172,3 +198,15 @@ Frontend Dashboard
 Docker
 GitHub Actions
 Deployment
+
+---
+
+## Known Issues Resolved
+
+Phase 6E.1 resolved:
+- Google OAuth visibility and callback alignment.
+- OAuth callback session restoration.
+- Copy link frontend-origin bug.
+- Expiration local-time display/edit/save bug.
+- `/app/links` route mismatch.
+- Redirect engine verification gap.

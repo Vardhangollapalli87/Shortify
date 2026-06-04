@@ -1,6 +1,8 @@
 import { LinkActions } from './LinkActions';
 import { CopyButton } from './CopyButton';
 import { StatusBadge } from './StatusBadge';
+import { formatLocalDateTime } from '../../lib/dateTime';
+import { buildShortLink } from '../../lib/shortLinks';
 
 const formatDate = (value) => {
   if (!value) return '—';
@@ -29,9 +31,10 @@ export const LinkRow = ({ link, onEdit, onDelete, onToggle, onView }) => (
     </td>
     <td className="px-4 py-4 text-slate-300">{link.totalClicks ?? 0}</td>
     <td className="px-4 py-4 text-slate-300">{formatDate(link.createdAt)}</td>
+    <td className="px-4 py-4 text-slate-300">{formatLocalDateTime(link.expiresAt)}</td>
     <td className="px-4 py-4">
       <div className="flex flex-wrap items-center gap-3">
-        <CopyButton value={`${window.location.origin}/${link.shortCode}`} />
+        <CopyButton value={buildShortLink(link.shortCode)} />
         <LinkActions onEdit={onEdit} onDelete={onDelete} onToggle={onToggle} onView={onView} isActive={link.isActive} />
       </div>
     </td>

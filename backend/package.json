@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "lint": "eslint .",
-    "health": "node scripts/check-health.js"
+    "health": "node scripts/check-health.js",
+    "verify:redirect": "node scripts/verify-redirect-engine.js"
   },
   "keywords": [
     "shortify",

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { formatLocalDateTime, isoToLocalDateTimeInput, localDateTimeInputToIso } from '../../lib/dateTime';
 
 const initialForm = {
   originalUrl: '',
@@ -17,7 +18,7 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
         originalUrl: link.originalUrl || '',
         shortCode: link.shortCode || '',
         title: link.title || '',
-        expiresAt: link.expiresAt ? link.expiresAt.slice(0, 16) : '',
+        expiresAt: isoToLocalDateTimeInput(link.expiresAt),
         password: ''
       });
       return;
@@ -37,7 +38,7 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
 
     onSubmit({
       ...form,
-      expiresAt: form.expiresAt ? new Date(form.expiresAt).toISOString() : null,
+      expiresAt: localDateTimeInputToIso(form.expiresAt),
       password: form.password || undefined
     });
   };
@@ -73,6 +74,7 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
             <label className="space-y-2 text-sm text-slate-200">
               <span>Expiration Date</span>
               <input type="datetime-local" value={form.expiresAt} onChange={(event) => setForm({ ...form, expiresAt: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" />
+              <span className="block text-xs text-slate-400">{form.expiresAt ? `Local time: ${formatLocalDateTime(localDateTimeInputToIso(form.expiresAt))}` : 'No expiration set'}</span>
             </label>
             <label className="space-y-2 text-sm text-slate-200">
               <span>Password Protection</span>

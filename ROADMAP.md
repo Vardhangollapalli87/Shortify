@@ -6,10 +6,28 @@ Completed
 ✓ Authentication
 ✓ Google OAuth
 ✓ Redirect Engine
+✓ Phase 6E.1 Critical Product Hardening
+
+Phase 6E.1 completed:
+- Google OAuth is visible on Login and Register pages.
+- OAuth callback defaults align to `/auth/callback`.
+- AuthProvider can restore OAuth sessions after callback.
+- OAuth failure handling is surfaced on Login.
+- Copied short links use `VITE_SHORT_LINK_BASE_URL`.
+- Expiration editing preserves local time while storing UTC.
+- `/app/links` and `/links` route consistently to Links management.
+- Redirect engine verification script and documentation are available.
+
+Known Issues Resolved:
+- Google OAuth not visible or not verified from the frontend.
+- Copy Link generated frontend-origin URLs.
+- Expiration date appeared incorrect after save.
+- `/app/links` rendered the wrong page.
+- Redirect engine lacked a repeatable verification command.
 
 Current
 ----------
-→ Phase 6C Links Management Page
+→ Phase 6E Product Hardening
 
 Links management page completed:
 - Protected /links route

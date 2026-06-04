@@ -1,19 +1,26 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../lib/axios';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthProvider';
 
 export default function OAuthCallback() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { restoreSession } = useAuth();
   const [message, setMessage] = useState('Finishing sign in...');
 
   useEffect(() => {
     const finishAuth = async () => {
-      try {
-        const response = await api.post('/auth/refresh');
-        const token = response.data?.data?.accessToken ?? null;
+      const error = searchParams.get('error');
 
-        if (token) {
-          localStorage.setItem('shortify_access_token', token);
+      if (error) {
+        navigate(`/login?error=${encodeURIComponent(error)}`, { replace: true });
+        return;
+      }
+
+      try {
+        const session = await restoreSession();
+
+        if (session?.accessToken) {
           navigate('/app', { replace: true });
           return;
         }
@@ -25,7 +32,7 @@ export default function OAuthCallback() {
     };
 
     finishAuth();
-  }, [navigate]);
+  }, [navigate, restoreSession, searchParams]);
 
   return (
     <main className="grid min-h-screen place-items-center px-6 py-16 text-slate-100">

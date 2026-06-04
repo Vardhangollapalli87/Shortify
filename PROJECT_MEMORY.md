@@ -285,6 +285,8 @@ GOOGLE_CALLBACK_URL
 
 CLIENT_URL
 
+VITE_SHORT_LINK_BASE_URL
+
 ---
 
 # Product Requirements
@@ -304,6 +306,31 @@ Must prioritize backend quality over feature quantity.
 ---
 
 # Current Phase
+
+Phase 6E.1 - Critical Product Hardening ✅
+
+Implemented:
+
+* Google OAuth sign-in is visible on Login and Register pages.
+* OAuth callback alignment now defaults to `/auth/callback`, with legacy `/auth/oauth/callback` still accepted by the frontend.
+* AuthProvider exposes session restoration for OAuth completion.
+* OAuth failures redirect back to Login with user-facing error handling.
+* Copied short links now use `VITE_SHORT_LINK_BASE_URL` instead of the frontend origin.
+* Link expiration editing converts stored UTC into local datetime input values and saves local input back to UTC.
+* Links table displays expiration in local time.
+* `/app/links` now renders the Links management page consistently with `/links`.
+* Redirect engine verification script and documentation added.
+
+Known Issues Resolved:
+
+* Google OAuth was implemented on the backend but not visible from frontend auth pages.
+* OAuth success callback default did not match the frontend route.
+* Copy link used the frontend origin instead of the backend/public short-link origin.
+* Expiration dates drifted because UTC ISO strings were sliced directly into `datetime-local`.
+* `/app/links` incorrectly rendered the Analytics page.
+* Redirect engine behavior lacked local verification coverage.
+
+---
 
 Phase 6C - Links Management Page ✅
 

@@ -20,6 +20,7 @@ export const LinkTable = ({ links, onEdit, onDelete, onToggle, onView }) => (
             <th className="px-4 py-3 font-medium">Status</th>
             <th className="px-4 py-3 font-medium">Clicks</th>
             <th className="px-4 py-3 font-medium">Created</th>
+            <th className="px-4 py-3 font-medium">Expires</th>
             <th className="px-4 py-3 font-medium">Actions</th>
           </tr>
         </thead>
