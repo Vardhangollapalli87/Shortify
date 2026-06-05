@@ -17,7 +17,7 @@ const parseNumber = (value, fallback) => {
 };
 
 const getCorsOrigins = () => {
-  const origins = process.env.CORS_ORIGINS || "http://localhost:5173";
+  const origins = process.env.CORS_ORIGINS || "http://localhost:3000";
 
   return origins
     .split(",")
@@ -42,15 +42,15 @@ const env = {
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
   refreshTokenCookieName: process.env.REFRESH_TOKEN_COOKIE_NAME || "shortify_refresh_token",
   cookieDomain: process.env.COOKIE_DOMAIN || undefined,
-  clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
+  clientUrl: process.env.CLIENT_URL || "http://localhost:3000",
   passwordResetTokenExpiresMinutes: parseNumber(process.env.PASSWORD_RESET_TOKEN_EXPIRES_MINUTES, 15),
-  clientPasswordResetUrl: process.env.CLIENT_PASSWORD_RESET_URL || "http://localhost:5173/reset-password",
+  clientPasswordResetUrl: process.env.CLIENT_PASSWORD_RESET_URL || "http://localhost:3000/reset-password",
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,
   googleOAuthStateCookieName: process.env.GOOGLE_OAUTH_STATE_COOKIE_NAME || "shortify_google_oauth_state",
-  clientOAuthSuccessUrl: process.env.CLIENT_OAUTH_SUCCESS_URL || "http://localhost:5173/auth/callback",
-  clientOAuthFailureUrl: process.env.CLIENT_OAUTH_FAILURE_URL || "http://localhost:5173/login"
+  clientOAuthSuccessUrl: process.env.CLIENT_OAUTH_SUCCESS_URL || "http://localhost:3000/auth/callback",
+  clientOAuthFailureUrl: process.env.CLIENT_OAUTH_FAILURE_URL || "http://localhost:3000/login"
 };
 
 const validateEnv = () => {
