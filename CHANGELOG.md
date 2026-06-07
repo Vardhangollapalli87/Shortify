@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## Phase 6E.3B - Authenticated Root Redirect
+
+Status: Complete
+
+Implemented:
+
+* Added auth-aware root route behavior.
+* Authenticated users visiting `/` now redirect to `/dashboard`.
+* Unauthenticated users continue to see the Landing page.
+
+---
+
+## Phase 6E.3A - Session Persistence Audit & Fix
+
+Status: Complete
+
+Audit:
+
+* Credentials and Google OAuth share the same refresh token generation and storage path.
+* Browser restart restoration depends on the refresh cookie and `/auth/refresh`.
+* Refresh cookie uses `httpOnly`, persistent `maxAge`, path `/api/v1/auth`, optional domain, and environment-specific `sameSite`/`secure`.
+* ProtectedRoute waits for AuthProvider loading before redirecting.
+
+Root Cause:
+
+* Strict refresh-token rotation could return `INVALID_REFRESH_TOKEN` when the same valid refresh cookie was submitted more than once in a short window.
+* Duplicate refreshes could come from page refresh, OAuth restoration, React development remounts, or multiple tabs.
+* Some auth/session URLs had hardcoded defaults instead of env-only configuration.
+
+Implemented:
+
+* Added `REFRESH_TOKEN_ROTATION_GRACE_SECONDS`.
+* Added duplicate refresh-token rotation grace handling.
+* Prevented duplicate grace refresh responses from setting stale replacement cookies.
+* Removed hardcoded auth/session URL defaults from frontend and backend runtime config.
+* Added `verify:session-restore` verification script.
+
+---
+
 ## Phase 6E.2 - User Experience & Session Hardening
 
 Status: Complete

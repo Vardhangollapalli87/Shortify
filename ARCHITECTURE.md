@@ -74,6 +74,14 @@ OAuth completion:
 - Login/Register expose Google OAuth entry points.
 - AuthProvider restores the refresh-token cookie into a frontend access-token session after OAuth callback.
 
+Session persistence:
+- Refresh cookies are persistent via `maxAge` derived from `JWT_REFRESH_EXPIRES_IN`.
+- Refresh cookies are scoped to `/api/v1/auth`.
+- Development cookies use `sameSite=lax`.
+- Production cookies use `sameSite=none` and `secure=true`.
+- Duplicate refresh-token use inside `REFRESH_TOKEN_ROTATION_GRACE_SECONDS` returns session data without issuing a stale cookie overwrite.
+- Runtime URLs are provided through environment configuration only.
+
 ---
 
 ## Short Link Origin
@@ -152,6 +160,20 @@ Implemented in Phase 6E.2:
 - Backend password redirect errors route browser users to the frontend challenge page.
 - Link editing supports explicit password keep, set/change, and remove states.
 - Links management includes search, filter, sort, copy feedback, and details view.
+
+---
+
+## Phase 6E.3A Session Persistence
+
+Root cause:
+- Strict refresh-token rotation could invalidate otherwise valid sessions when the same refresh cookie was used twice during startup, page refresh, OAuth callback restoration, or multiple-tab restoration.
+- Some auth/session URL defaults were hardcoded instead of coming only from environment variables.
+
+Fix:
+- Added duplicate rotation grace handling in `token.service.js`.
+- `auth.controller.js` now sets a new refresh cookie only when a refresh actually issues one.
+- Removed hardcoded frontend/backend auth URL defaults.
+- Added `backend/scripts/verify-session-restore.js`.
 
 ---
 

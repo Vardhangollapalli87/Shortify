@@ -23,6 +23,12 @@ const getRefreshCookieOptions = () => ({
   maxAge: durationToMilliseconds(env.jwtRefreshExpiresIn)
 });
 
+const getRefreshCookieClearOptions = () => {
+  const clearOptions = { ...getRefreshCookieOptions() };
+  delete clearOptions.maxAge;
+  return clearOptions;
+};
+
 const getGoogleStateCookieOptions = () => ({
   httpOnly: true,
   secure: env.nodeEnv === "production",
@@ -39,11 +45,15 @@ const appendQueryParam = (url, key, value) => {
 };
 
 const setRefreshTokenCookie = (res, refreshToken) => {
+  if (!refreshToken) {
+    return;
+  }
+
   res.cookie(env.refreshTokenCookieName, refreshToken, getRefreshCookieOptions());
 };
 
 const clearRefreshTokenCookie = (res) => {
-  res.clearCookie(env.refreshTokenCookieName, getRefreshCookieOptions());
+  res.clearCookie(env.refreshTokenCookieName, getRefreshCookieClearOptions());
 };
 
 const startGoogleOAuth = (_req, res) => {
@@ -118,7 +128,9 @@ const refresh = catchAsync(async (req, res) => {
   const refreshToken = req.cookies[env.refreshTokenCookieName];
   const result = await authService.refresh({ refreshToken, req });
 
-  setRefreshTokenCookie(res, result.refreshToken);
+  if (result.refreshToken) {
+    setRefreshTokenCookie(res, result.refreshToken);
+  }
 
   return sendResponse(
     res,

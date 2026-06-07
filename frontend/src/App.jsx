@@ -9,11 +9,26 @@ import PasswordChallenge from './pages/PasswordChallenge';
 import Dashboard from './pages/Dashboard';
 import LinksPage from './pages/Links';
 import AnalyticsPage from './pages/Analytics';
+import { useAuth } from './context/AuthProvider';
+
+const RootRoute = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="grid min-h-screen place-items-center bg-slate-950 text-slate-200">Loading session...</div>;
+  }
+
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Landing />;
+};
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
+      <Route path="/" element={<RootRoute />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/auth/callback" element={<OAuthCallback />} />

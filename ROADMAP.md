@@ -8,6 +8,7 @@ Completed
 ✓ Redirect Engine
 ✓ Phase 6E.1 Critical Product Hardening
 ✓ Phase 6E.2 User Experience & Session Hardening
+✓ Phase 6E.3A Session Persistence Audit & Fix
 
 Phase 6E.1 completed:
 - Google OAuth is visible on Login and Register pages.
@@ -29,6 +30,14 @@ Known Issues Resolved:
 Current
 ----------
 → Phase 6E Product Hardening
+
+Phase 6E.3A completed:
+- Audited credentials and Google OAuth session restoration.
+- Verified refresh cookie settings and ProtectedRoute behavior.
+- Fixed duplicate refresh-token rotation within a short grace window.
+- Prevented duplicate refresh responses from overwriting cookies with invalid/stale values.
+- Removed hardcoded auth/session URL defaults from frontend and backend runtime config.
+- Added `verify:session-restore` for duplicate refresh restoration behavior.
 
 Phase 6E.2 audit:
 - Critical Bugs: protected-link UX missing, password removal incomplete, refresh restoration can run unnecessarily more than once.

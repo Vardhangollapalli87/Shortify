@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "health": "node scripts/check-health.js",
     "verify:redirect": "node scripts/verify-redirect-engine.js",
-    "verify:password-removal": "node scripts/verify-password-removal.js"
+    "verify:password-removal": "node scripts/verify-password-removal.js",
+    "verify:session-restore": "node scripts/verify-session-restore.js"
   },
   "keywords": [
     "shortify",

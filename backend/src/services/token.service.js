@@ -40,6 +40,15 @@ const createAuthTokens = async ({ user, req }) => {
   };
 };
 
+const isWithinRotationGrace = (token) => {
+  if (!token.revokedAt || !token.replacedByTokenId) {
+    return false;
+  }
+
+  const graceMs = env.refreshTokenRotationGraceSeconds * 1000;
+  return Date.now() - token.revokedAt.getTime() <= graceMs;
+};
+
 const rotateRefreshToken = async ({ refreshToken, req }) => {
   const decoded = verifyRefreshToken(refreshToken);
   const tokenHash = hashToken(refreshToken);
@@ -50,8 +59,31 @@ const rotateRefreshToken = async ({ refreshToken, req }) => {
     tokenHash
   }).populate("userId");
 
-  if (!currentToken || !currentToken.isActive()) {
+  if (!currentToken) {
     return null;
+  }
+
+  if (!currentToken.isActive()) {
+    if (!isWithinRotationGrace(currentToken)) {
+      return null;
+    }
+
+    const replacementToken = await RefreshToken.findOne({
+      _id: currentToken.replacedByTokenId,
+      userId: decoded.sub
+    }).populate("userId");
+
+    if (!replacementToken || !replacementToken.isActive()) {
+      return null;
+    }
+
+    const user = replacementToken.userId;
+
+    return {
+      user,
+      accessToken: signAccessToken(user),
+      refreshToken: null
+    };
   }
 
   const user = currentToken.userId;

@@ -8,7 +8,12 @@ const requiredEnvVars = [
   "JWT_REFRESH_SECRET",
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",
-  "GOOGLE_CALLBACK_URL"
+  "GOOGLE_CALLBACK_URL",
+  "CORS_ORIGINS",
+  "CLIENT_URL",
+  "CLIENT_PASSWORD_RESET_URL",
+  "CLIENT_OAUTH_SUCCESS_URL",
+  "CLIENT_OAUTH_FAILURE_URL"
 ];
 
 const parseNumber = (value, fallback) => {
@@ -17,7 +22,7 @@ const parseNumber = (value, fallback) => {
 };
 
 const getCorsOrigins = () => {
-  const origins = process.env.CORS_ORIGINS || "http://localhost:3000";
+  const origins = process.env.CORS_ORIGINS || "";
 
   return origins
     .split(",")
@@ -40,17 +45,18 @@ const env = {
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
+  refreshTokenRotationGraceSeconds: parseNumber(process.env.REFRESH_TOKEN_ROTATION_GRACE_SECONDS, 10),
   refreshTokenCookieName: process.env.REFRESH_TOKEN_COOKIE_NAME || "shortify_refresh_token",
   cookieDomain: process.env.COOKIE_DOMAIN || undefined,
-  clientUrl: process.env.CLIENT_URL || "http://localhost:3000",
+  clientUrl: process.env.CLIENT_URL,
   passwordResetTokenExpiresMinutes: parseNumber(process.env.PASSWORD_RESET_TOKEN_EXPIRES_MINUTES, 15),
-  clientPasswordResetUrl: process.env.CLIENT_PASSWORD_RESET_URL || "http://localhost:3000/reset-password",
+  clientPasswordResetUrl: process.env.CLIENT_PASSWORD_RESET_URL,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,
   googleOAuthStateCookieName: process.env.GOOGLE_OAUTH_STATE_COOKIE_NAME || "shortify_google_oauth_state",
-  clientOAuthSuccessUrl: process.env.CLIENT_OAUTH_SUCCESS_URL || "http://localhost:3000/auth/callback",
-  clientOAuthFailureUrl: process.env.CLIENT_OAUTH_FAILURE_URL || "http://localhost:3000/login"
+  clientOAuthSuccessUrl: process.env.CLIENT_OAUTH_SUCCESS_URL,
+  clientOAuthFailureUrl: process.env.CLIENT_OAUTH_FAILURE_URL
 };
 
 const validateEnv = () => {

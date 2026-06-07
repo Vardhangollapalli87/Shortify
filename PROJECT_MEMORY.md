@@ -307,6 +307,58 @@ Must prioritize backend quality over feature quantity.
 
 # Current Phase
 
+Phase 6E.3B - Authenticated Root Redirect ✅
+
+Implemented:
+
+* Root route `/` now waits for AuthProvider session restoration.
+* Authenticated users visiting `/` are redirected to `/dashboard`.
+* Unauthenticated users still see the Landing page.
+
+Files:
+
+* `frontend/src/App.jsx`
+
+---
+
+Phase 6E.3A - Session Persistence Audit & Fix ✅
+
+Session Audit Findings:
+
+* Refresh cookie settings are persistent: `httpOnly`, `maxAge` from `JWT_REFRESH_EXPIRES_IN`, auth path `/api/v1/auth`, optional `COOKIE_DOMAIN`, `sameSite=lax` in development, and `sameSite=none` plus `secure=true` in production.
+* Credentials login and Google OAuth both generate access tokens and refresh token records through the same backend token service.
+* Credentials auth sets frontend user state directly from the login/register response.
+* Google OAuth sets the refresh cookie in the callback, then frontend restores user state through `/auth/refresh`.
+* ProtectedRoute correctly waits for AuthProvider loading before redirecting.
+
+Root Cause Found:
+
+* Refresh-token rotation was strict: if a valid refresh cookie was used twice in a short window, the first request rotated and revoked it while the second request could return `INVALID_REFRESH_TOKEN`.
+* This could happen during browser startup, page refresh, OAuth callback restoration, React development remounts, or multiple open tabs.
+* Some frontend and backend auth/session URL defaults were hardcoded instead of being sourced only from environment configuration.
+
+Fix Implemented:
+
+* Added a short `REFRESH_TOKEN_ROTATION_GRACE_SECONDS` window for duplicate use of a just-rotated refresh token.
+* Duplicate refresh within the grace window returns a valid access token/user session without setting a stale replacement cookie.
+* Refresh responses now set a refresh cookie only when a new refresh token is actually issued.
+* Removed hardcoded auth/session URL defaults from frontend API/OAuth helpers and backend env config.
+* Added `verify:session-restore` script for duplicate refresh restoration behavior.
+
+Affected Files:
+
+* `backend/src/services/token.service.js`
+* `backend/src/controllers/auth.controller.js`
+* `backend/src/config/env.js`
+* `backend/.env.example`
+* `backend/package.json`
+* `backend/scripts/verify-session-restore.js`
+* `frontend/src/lib/axios.js`
+* `frontend/src/components/auth/GoogleOAuthButton.jsx`
+* `frontend/src/lib/shortLinks.js`
+
+---
+
 Phase 6E.2 - User Experience & Session Hardening ✅
 
 Audit Findings:
