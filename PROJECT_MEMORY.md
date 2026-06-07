@@ -307,6 +307,46 @@ Must prioritize backend quality over feature quantity.
 
 # Current Phase
 
+Phase 6E.3B - Settings & Account Management ✅
+
+Backend endpoints added:
+
+* `GET /api/v1/users/me`
+* `PATCH /api/v1/users/me`
+* `PATCH /api/v1/users/change-password`
+* `DELETE /api/v1/users/me`
+
+Backend security decisions:
+
+* All account endpoints use existing `protect` middleware.
+* Profile updates are limited to `name` and `avatarUrl`.
+* Password changes are credentials-only; Google-only accounts receive `PASSWORD_MANAGED_BY_GOOGLE`.
+* Password changes validate current password, new password strength, and confirmation.
+* Account deletion removes user-owned links, revokes refresh tokens, deletes the user, and clears the refresh cookie.
+
+Frontend components and routes added:
+
+* Protected `/settings` route.
+* `/app/settings` now renders the same Settings page.
+* Settings page sections: Profile, Security, Connected Account, Session Information, Danger Zone.
+* Settings service module for `/users` APIs.
+* Password visibility toggles, strength indicator, inline validation, loading states, success/error toasts, and delete confirmation modal.
+
+Files:
+
+* `backend/src/controllers/user.controller.js`
+* `backend/src/services/user.service.js`
+* `backend/src/routes/user.routes.js`
+* `backend/src/validators/user.validator.js`
+* `backend/src/routes/index.js`
+* `frontend/src/pages/Settings.jsx`
+* `frontend/src/services/users.service.js`
+* `frontend/src/App.jsx`
+* `frontend/src/components/layout/Sidebar.jsx`
+* `frontend/src/lib/apiErrors.js`
+
+---
+
 Phase 6E.3B - Authenticated Root Redirect ✅
 
 Implemented:

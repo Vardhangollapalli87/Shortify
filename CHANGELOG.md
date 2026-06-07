@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## Phase 6E.3B - Settings & Account Management
+
+Status: Complete
+
+Implemented:
+
+* Added protected user account endpoints under `/api/v1/users`
+* Added profile retrieval and update
+* Added credentials-only password change with current password and strength validation
+* Added account deletion with owned link removal and refresh-token revocation
+* Added protected `/settings` frontend route
+* Added Settings page with Profile, Security, Connected Account, Session Information, and Danger Zone sections
+* Added password visibility toggles and strength indicator
+* Added delete account confirmation modal
+* Added Settings API service module
+* Added user-account API error mappings
+
+Verification:
+
+* Backend lint and frontend build were run for this phase.
+
+---
+
 ## Phase 6E.3B - Authenticated Root Redirect
 
 Status: Complete

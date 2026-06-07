@@ -4,7 +4,7 @@ const links = [
   { to: '/dashboard', label: 'Overview' },
   { to: '/links', label: 'Links' },
   { to: '/analytics', label: 'Analytics' },
-  { to: '/app/settings', label: 'Settings' }
+  { to: '/settings', label: 'Settings' }
 ];
 
 export const Sidebar = () => (

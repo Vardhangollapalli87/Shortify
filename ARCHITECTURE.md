@@ -177,6 +177,27 @@ Fix:
 
 ---
 
+## Phase 6E.3B Settings & Account Management
+
+Backend account endpoints:
+- `GET /api/v1/users/me`
+- `PATCH /api/v1/users/me`
+- `PATCH /api/v1/users/change-password`
+- `DELETE /api/v1/users/me`
+
+Security decisions:
+- Endpoints are protected by JWT auth middleware.
+- Profile updates only allow `name` and `avatarUrl`.
+- Password changes are available only for credentials-capable accounts.
+- Account deletion revokes refresh tokens, deletes owned links, deletes the user, and clears the refresh cookie.
+
+Frontend:
+- Protected `/settings` route under the existing app shell.
+- Sections for Profile, Security, Connected Account, Session Information, and Danger Zone.
+- React Query is used for loading and mutations.
+
+---
+
 ## Analytics
 
 MVP analytics scope:

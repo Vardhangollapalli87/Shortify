@@ -72,6 +72,8 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(async () => {
     try {
       await api.post('/auth/logout');
+    } catch {
+      // Local session must still be cleared if the server session is already gone.
     } finally {
       localStorage.removeItem('shortify_access_token');
       setAccessToken(null);
