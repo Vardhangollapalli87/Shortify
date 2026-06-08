@@ -10,6 +10,7 @@ Completed
 ✓ Phase 6E.2 User Experience & Session Hardening
 ✓ Phase 6E.3A Session Persistence Audit & Fix
 ✓ Phase 6E.3B Settings & Account Management
+✓ Phase 6E.4 QR Code System
 
 Phase 6E.1 completed:
 - Google OAuth is visible on Login and Register pages.
@@ -47,6 +48,13 @@ Phase 6E.3B completed:
 - Added connected account and session information sections.
 - Added account deletion endpoint and confirmation flow.
 - Added Settings page service module, validation, loading states, and user-friendly errors.
+
+Phase 6E.4 completed:
+- Added QR actions to Links management.
+- Added frontend-only QR code generation from canonical short URLs.
+- Added QR modal, preview, and action components.
+- Added PNG download, short URL copy, and preview regeneration.
+- Kept existing backend URL APIs and Link CRUD unchanged.
 
 Phase 6E.2 audit:
 - Critical Bugs: protected-link UX missing, password removal incomplete, refresh restoration can run unnecessarily more than once.

@@ -98,6 +98,22 @@ This keeps copied links pointed at the backend/public redirect origin instead of
 
 ---
 
+## QR Code System
+
+QR codes are generated on the frontend from the canonical short URL.
+
+Implementation:
+- Links management exposes a QR action for each short link.
+- `buildShortLink(shortCode)` provides the QR payload, so QR output uses the same configured short-link origin as copy actions.
+- The QR preview renders to canvas and can be downloaded as a PNG.
+- Regeneration redraws the deterministic QR preview from the latest short URL.
+
+Design decision:
+- No QR database fields, image storage, or backend QR endpoints were added.
+- QR images are deterministic assets derived from the short URL, so frontend generation is the simplest production-ready approach for Phase 6E.4.
+
+---
+
 ## Redirect Flow
 
 User Clicks Link

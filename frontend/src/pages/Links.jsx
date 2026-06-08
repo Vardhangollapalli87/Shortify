@@ -9,6 +9,7 @@ import { ErrorState } from '../components/dashboard/ErrorState';
 import { LoadingSkeleton } from '../components/dashboard/LoadingSkeleton';
 import { createLink, deleteLink, getUserLinks, toggleLink, updateLink } from '../services/urls.service';
 import { buildShortLink } from '../lib/shortLinks';
+import { QRCodeModal } from '../components/qr/QRCodeModal';
 
 export default function LinksPage() {
   const queryClient = useQueryClient();
@@ -16,6 +17,7 @@ export default function LinksPage() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [activeLink, setActiveLink] = useState(null);
   const [detailLink, setDetailLink] = useState(null);
+  const [qrLink, setQrLink] = useState(null);
   const [toast, setToast] = useState(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -190,6 +192,7 @@ export default function LinksPage() {
           }}
           onToggle={(link) => toggleMutation.mutate(link.id)}
           onView={(link) => setDetailLink(link)}
+          onQr={(link) => setQrLink(link)}
           onCopy={() => {
             setToast({ message: 'Short link copied.', tone: 'success' });
             setTimeout(() => setToast(null), 1800);
@@ -252,6 +255,20 @@ export default function LinksPage() {
           setActiveLink(null);
         }}
         onConfirm={() => deleteMutation.mutate(activeLink.id)}
+      />
+
+      <QRCodeModal
+        isOpen={Boolean(qrLink)}
+        link={qrLink}
+        onClose={() => setQrLink(null)}
+        onCopy={() => {
+          setToast({ message: 'Short link copied.', tone: 'success' });
+          setTimeout(() => setToast(null), 1800);
+        }}
+        onCopyError={() => {
+          setToast({ message: 'Unable to copy. Select and copy the link manually.', tone: 'error' });
+          setTimeout(() => setToast(null), 2600);
+        }}
       />
 
       {toast ? <Toast message={toast.message} tone={toast.tone} /> : null}

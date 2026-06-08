@@ -307,6 +307,35 @@ Must prioritize backend quality over feature quantity.
 
 # Current Phase
 
+Phase 6E.4 - QR Code System ✅
+
+Design Decision:
+
+* QR codes are generated entirely on the frontend from the canonical short URL.
+* No QR image files are stored and no backend QR endpoints were added.
+* This keeps QR output deterministic, avoids asset lifecycle/storage work, and preserves existing Link CRUD APIs.
+
+Implemented:
+
+* QR action added to each Links management row.
+* Reusable QR components for modal, preview, and actions.
+* QR preview renders from `buildShortLink(shortCode)` using the configured `VITE_SHORT_LINK_BASE_URL` flow.
+* Users can download a QR code PNG, copy the short URL, and regenerate the preview.
+* Loading, error, and success states are included in the QR flow.
+
+Files:
+
+* `frontend/src/lib/qrCode.js`
+* `frontend/src/components/qr/QRCodeModal.jsx`
+* `frontend/src/components/qr/QRCodePreview.jsx`
+* `frontend/src/components/qr/QRCodeActions.jsx`
+* `frontend/src/pages/Links.jsx`
+* `frontend/src/components/links/LinkTable.jsx`
+* `frontend/src/components/links/LinkRow.jsx`
+* `frontend/src/components/links/LinkActions.jsx`
+
+---
+
 Phase 6E.3B - Settings & Account Management ✅
 
 Backend endpoints added:

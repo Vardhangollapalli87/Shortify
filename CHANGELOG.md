@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## Phase 6E.4 - QR Code System
+
+Status: Complete
+
+Design Decision:
+
+* QR codes are generated on the frontend from each link's canonical short URL.
+* No backend QR endpoints, stored QR assets, or URL schema changes were added.
+
+Implemented:
+
+* Added QR action to Links management rows.
+* Added reusable QRCodeModal, QRCodePreview, and QRCodeActions components.
+* Added deterministic canvas QR rendering.
+* Added PNG download for each short link QR code.
+* Added short URL copy and QR preview regeneration inside the QR modal.
+* Kept existing Link CRUD behavior unchanged.
+
+Verification:
+
+* Backend lint and frontend build were run for this phase.
+
+---
+
 ## Phase 6E.3B - Settings & Account Management
 
 Status: Complete
