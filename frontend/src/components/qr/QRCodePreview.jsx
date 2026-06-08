@@ -1,38 +1,46 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createQrMatrix, drawQrToCanvas } from '../../lib/qrCode';
+import { drawQrToCanvas, validateQrPayload } from '../../lib/qrCode';
 
 export const QRCodePreview = ({ value, renderKey, onCanvasReady }) => {
   const canvasRef = useRef(null);
   const [status, setStatus] = useState('loading');
+  const [drawError, setDrawError] = useState('');
 
   const result = useMemo(() => {
     try {
-      return { matrix: createQrMatrix(value), error: '' };
+      return { payload: validateQrPayload(value), error: '' };
     } catch (qrError) {
-      return { matrix: null, error: qrError.message || 'Unable to generate QR code.' };
+      return { payload: '', error: qrError.message || 'Unable to generate QR code.' };
     }
   }, [value, renderKey]);
 
   useEffect(() => {
-    if (!result.matrix || !canvasRef.current) {
+    if (!result.payload || !canvasRef.current) {
       setStatus('error');
       onCanvasReady?.(null);
       return;
     }
 
     setStatus('loading');
+    setDrawError('');
 
-    window.requestAnimationFrame(() => {
-      drawQrToCanvas(canvasRef.current, result.matrix);
-      setStatus('ready');
-      onCanvasReady?.(canvasRef.current);
+    window.requestAnimationFrame(async () => {
+      try {
+        await drawQrToCanvas(canvasRef.current, result.payload);
+        setStatus('ready');
+        onCanvasReady?.(canvasRef.current);
+      } catch (qrError) {
+        setDrawError(qrError.message || 'Unable to render QR code.');
+        setStatus('error');
+        onCanvasReady?.(null);
+      }
     });
-  }, [result.matrix, onCanvasReady]);
+  }, [result.payload, onCanvasReady]);
 
-  if (result.error) {
+  if (result.error || drawError) {
     return (
       <div className="flex min-h-[280px] items-center justify-center rounded-2xl border border-rose-500/30 bg-rose-500/10 p-6 text-center text-sm text-rose-100">
-        {result.error}
+        {result.error || drawError}
       </div>
     );
   }
