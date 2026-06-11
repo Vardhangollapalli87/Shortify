@@ -4,8 +4,43 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: shortify-api
-    ports:
-      - "5000:5000"
     env_file:
       - ./backend/.env
+    environment:
+      PORT: ${BACKEND_CONTAINER_PORT}
+      HEALTHCHECK_HOST: ${BACKEND_HEALTHCHECK_HOST}
+      HEALTHCHECK_PATH: ${BACKEND_HEALTHCHECK_PATH}
+    ports:
+      - "${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}"
     restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        VITE_SHORT_LINK_BASE_URL: ${VITE_SHORT_LINK_BASE_URL}
+    container_name: shortify-frontend
+    environment:
+      NGINX_PORT: ${FRONTEND_CONTAINER_PORT}
+    ports:
+      - "${FRONTEND_HOST_PORT}:${FRONTEND_CONTAINER_PORT}"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: shortify-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_HOST_PORT}:${REDIS_CONTAINER_PORT}"
+    volumes:
+      - redis-data:/data
+    profiles:
+      - local-cache
+    restart: unless-stopped
+
+volumes:
+  redis-data:

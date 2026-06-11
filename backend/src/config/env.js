@@ -30,6 +30,14 @@ const getCorsOrigins = () => {
     .filter(Boolean);
 };
 
+const isHttpsUrl = (value) => {
+  try {
+    return new URL(value).protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 const env = {
   nodeEnv: process.env.NODE_ENV || "development",
   port: parseNumber(process.env.PORT, 5000),
@@ -64,6 +72,31 @@ const validateEnv = () => {
 
   if (missingVars.length > 0) {
     throw new Error(`Missing required environment variables: ${missingVars.join(", ")}`);
+  }
+
+  if (env.nodeEnv !== "production") {
+    return;
+  }
+
+  const insecureUrlVars = [
+    ["CLIENT_URL", env.clientUrl],
+    ["CLIENT_PASSWORD_RESET_URL", env.clientPasswordResetUrl],
+    ["CLIENT_OAUTH_SUCCESS_URL", env.clientOAuthSuccessUrl],
+    ["CLIENT_OAUTH_FAILURE_URL", env.clientOAuthFailureUrl],
+    ["GOOGLE_CALLBACK_URL", env.googleCallbackUrl],
+    ...env.corsOrigins.map((origin) => ["CORS_ORIGINS", origin])
+  ].filter(([, value]) => !isHttpsUrl(value));
+
+  if (insecureUrlVars.length > 0) {
+    throw new Error(
+      `Production URL environment variables must use HTTPS: ${insecureUrlVars
+        .map(([key]) => key)
+        .join(", ")}`
+    );
+  }
+
+  if (env.jwtAccessSecret.length < 32 || env.jwtRefreshSecret.length < 32) {
+    throw new Error("Production JWT secrets must be at least 32 characters long");
   }
 };
 

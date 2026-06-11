@@ -90,11 +90,24 @@ Frontend copied short links use:
 
 `VITE_SHORT_LINK_BASE_URL`
 
-Local default:
-
-`http://localhost:5000`
-
 This keeps copied links pointed at the backend/public redirect origin instead of the frontend application origin.
+
+---
+
+## Deployment Architecture
+
+Production targets:
+- Frontend: Vercel
+- Backend: Render
+- Database: MongoDB Atlas
+- Cache: Redis Cloud
+
+Deployment configuration:
+- Frontend runtime build values are supplied through `VITE_*` variables.
+- Backend runtime configuration is centralized in `backend/src/config/env.js`.
+- Production backend startup validates required environment variables, HTTPS callback/origin URLs, and JWT secret length.
+- Docker Compose supports API, frontend, and an optional local Redis service; MongoDB remains Atlas-hosted.
+- `DEPLOYMENT.md` contains Vercel, Render, Atlas, Redis Cloud, and Google OAuth production setup steps.
 
 ---
 

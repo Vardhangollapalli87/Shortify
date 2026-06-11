@@ -1,11 +1,16 @@
 const http = require("http");
 
-const port = process.env.PORT || 5000;
-const path = "/api/v1/health";
+const port = process.env.PORT;
+const hostname = process.env.HEALTHCHECK_HOST;
+const path = process.env.HEALTHCHECK_PATH;
+
+if (!port || !hostname || !path) {
+  process.exit(1);
+}
 
 const request = http.request(
   {
-    hostname: "localhost",
+    hostname,
     port,
     path,
     method: "GET",

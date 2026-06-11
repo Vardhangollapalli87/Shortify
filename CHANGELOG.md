@@ -1,5 +1,36 @@
 # CHANGELOG
 
+## Phase 6E.5 - Deployment Readiness & Production Hardening
+
+Status: Complete
+
+Audit Findings:
+
+* Frontend Docker support was missing.
+* Docker Compose only ran the backend API.
+* Deployment environment variable documentation was incomplete.
+* Vite dev server host and port were fixed in source.
+* Backend healthcheck behavior depended on local defaults.
+* Production env validation did not reject insecure callback/origin URLs.
+
+Implemented:
+
+* Added deployment guide for Vercel, Render, MongoDB Atlas, Redis Cloud, and Google OAuth production setup.
+* Added frontend Dockerfile with nginx SPA routing.
+* Added frontend nginx template and Vercel rewrite config.
+* Added backend and frontend Docker ignore files.
+* Updated backend Dockerfile healthcheck behavior.
+* Reworked Docker Compose for backend, frontend, and optional Redis service support.
+* Added Render blueprint configuration.
+* Added production environment validation for HTTPS URL variables and JWT secret length.
+* Updated environment variable examples.
+
+Verification:
+
+* Backend lint, frontend build, and Docker build checks were run for this phase.
+
+---
+
 ## Phase 6E.4 - QR Code System
 
 Status: Complete

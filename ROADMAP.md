@@ -11,6 +11,7 @@ Completed
 ✓ Phase 6E.3A Session Persistence Audit & Fix
 ✓ Phase 6E.3B Settings & Account Management
 ✓ Phase 6E.4 QR Code System
+✓ Phase 6E.5 Deployment Readiness & Production Hardening
 
 Phase 6E.1 completed:
 - Google OAuth is visible on Login and Register pages.
@@ -55,6 +56,14 @@ Phase 6E.4 completed:
 - Added QR modal, preview, and action components.
 - Added PNG download, short URL copy, and preview regeneration.
 - Kept existing backend URL APIs and Link CRUD unchanged.
+
+Phase 6E.5 completed:
+- Added deployment audit and production readiness documentation.
+- Added frontend Dockerfile and nginx SPA config.
+- Hardened backend Docker healthcheck configuration.
+- Reworked Docker Compose for API, frontend, and optional Redis service support.
+- Added Vercel and Render deployment configuration.
+- Added production environment validation for HTTPS URLs and JWT secret strength.
 
 Phase 6E.2 audit:
 - Critical Bugs: protected-link UX missing, password removal incomplete, refresh restoration can run unnecessarily more than once.
@@ -132,10 +141,6 @@ Phase 5 implementation plan
 
 Upcoming
 ----------
-→ Frontend SaaS Dashboard
-→ Docker
 → GitHub Actions
-→ Deployment
 → Production Security Review
-→ UI Polish
 → Launch

@@ -307,6 +307,55 @@ Must prioritize backend quality over feature quantity.
 
 # Current Phase
 
+Phase 6E.5 - Deployment Readiness & Production Hardening ✅
+
+Deployment Target:
+
+* Frontend: Vercel
+* Backend: Render
+* Database: MongoDB Atlas
+* Cache: Redis Cloud
+
+Audit Findings Resolved:
+
+* Frontend containerization was missing.
+* Docker Compose only ran the backend and used fixed local port mappings.
+* Vite dev server host/port were pinned in source.
+* Backend container healthcheck depended on hardcoded local host behavior.
+* Production env validation did not reject insecure callback/origin URLs.
+* Deployment documentation was missing for Vercel, Render, Atlas, Redis Cloud, and Google OAuth production setup.
+
+Implemented:
+
+* Added frontend Dockerfile and nginx SPA config template.
+* Hardened backend Dockerfile and added Docker ignore files.
+* Reworked root Docker Compose with API, frontend, and optional Redis service support.
+* Added root deployment `.env.example`.
+* Added Vercel SPA rewrite config.
+* Added Render blueprint configuration.
+* Added production env validation for HTTPS URLs and JWT secret length.
+* Added `DEPLOYMENT.md` with deployment instructions and verification checklists.
+
+Files:
+
+* `DEPLOYMENT.md`
+* `.env.example`
+* `docker-compose.yml`
+* `render.yaml`
+* `backend/Dockerfile`
+* `backend/.dockerignore`
+* `backend/.env.example`
+* `backend/scripts/check-health.js`
+* `backend/src/config/env.js`
+* `frontend/Dockerfile`
+* `frontend/.dockerignore`
+* `frontend/nginx.conf.template`
+* `frontend/vercel.json`
+* `frontend/.env.example`
+* `frontend/vite.config.js`
+
+---
+
 Phase 6E.4 - QR Code System ✅
 
 Design Decision:
