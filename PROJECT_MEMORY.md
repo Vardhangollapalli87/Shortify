@@ -307,6 +307,44 @@ Must prioritize backend quality over feature quantity.
 
 # Current Phase
 
+Phase 6E.6 - Email Verification & Email Infrastructure ✅
+
+Implemented:
+
+* Credentials registration now creates an expiring, single-use email verification token.
+* Email verification tokens are hashed before storage.
+* Verification marks `isEmailVerified=true`, clears token fields, and sends a welcome email.
+* Google users remain verified through Google profile verification and do not receive verification emails.
+* Resend verification email support added for unverified credentials users.
+* Password reset email delivery now uses the shared Resend-backed email service.
+* Frontend verify email page added with success, failed, and resend states.
+
+Email Architecture Decisions:
+
+* Existing user schema and auth service patterns were reused.
+* Raw verification and reset tokens are only sent by email; only SHA-256 hashes are stored.
+* Resend is called from a single reusable email service.
+* Non-production email delivery logs when Resend variables are absent; production requires `RESEND_API_KEY` and `EMAIL_FROM`.
+
+Files:
+
+* `backend/src/models/user.model.js`
+* `backend/src/services/auth.service.js`
+* `backend/src/services/email.service.js`
+* `backend/src/controllers/auth.controller.js`
+* `backend/src/routes/auth.routes.js`
+* `backend/src/validators/auth.validator.js`
+* `backend/src/config/env.js`
+* `backend/.env.example`
+* `frontend/src/pages/VerifyEmail.jsx`
+* `frontend/src/App.jsx`
+* `frontend/src/pages/Register.jsx`
+* `frontend/src/lib/apiErrors.js`
+* `render.yaml`
+* `DEPLOYMENT.md`
+
+---
+
 Phase 6E.5 - Deployment Readiness & Production Hardening ✅
 
 Deployment Target:

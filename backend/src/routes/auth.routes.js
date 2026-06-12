@@ -10,6 +10,8 @@ router.post("/login", authController.login);
 router.post("/refresh", authController.refresh);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password", authController.resetPassword);
+router.post("/verify-email", authController.verifyEmail);
+router.post("/resend-verification", authController.resendVerificationEmail);
 router.get("/google", authController.startGoogleOAuth);
 router.get("/google/callback", authController.googleOAuthCallback);
 

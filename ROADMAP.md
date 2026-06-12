@@ -12,6 +12,7 @@ Completed
 ✓ Phase 6E.3B Settings & Account Management
 ✓ Phase 6E.4 QR Code System
 ✓ Phase 6E.5 Deployment Readiness & Production Hardening
+✓ Phase 6E.6 Email Verification & Email Infrastructure
 
 Phase 6E.1 completed:
 - Google OAuth is visible on Login and Register pages.
@@ -64,6 +65,13 @@ Phase 6E.5 completed:
 - Reworked Docker Compose for API, frontend, and optional Redis service support.
 - Added Vercel and Render deployment configuration.
 - Added production environment validation for HTTPS URLs and JWT secret strength.
+
+Phase 6E.6 completed:
+- Added hashed, expiring, single-use email verification tokens.
+- Added verification and resend verification endpoints.
+- Added Resend-backed verification, welcome, and password reset emails.
+- Added frontend verify email and resend verification experience.
+- Documented Resend deployment environment variables.
 
 Phase 6E.2 audit:
 - Critical Bugs: protected-link UX missing, password removal incomplete, refresh restoration can run unnecessarily more than once.

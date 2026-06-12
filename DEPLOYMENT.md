@@ -14,7 +14,6 @@ Resolved in Phase 6E.5:
 
 Remaining deployment risks:
 
-* Password reset email delivery is still a placeholder until AWS SES is implemented.
 * Frontend bundle has a large chunk warning and should be code-split after launch readiness.
 * npm audit reports moderate frontend dependency advisories from the QR dependency tree.
 
@@ -24,7 +23,8 @@ Remaining deployment risks:
 * Backend: Render
 * Database: MongoDB Atlas
 * Cache: Redis Cloud
-* Future services: AWS SES and AWS S3
+* Email: Resend
+* Future services: AWS S3
 
 ## Frontend Deployment - Vercel
 
@@ -88,9 +88,13 @@ JWT_REFRESH_EXPIRES_IN=30d
 REFRESH_TOKEN_ROTATION_GRACE_SECONDS=10
 CORS_ORIGINS=https://your-frontend-domain.example
 CLIENT_URL=https://your-frontend-domain.example
+CLIENT_VERIFY_EMAIL_URL=https://your-frontend-domain.example/verify-email
 CLIENT_PASSWORD_RESET_URL=https://your-frontend-domain.example/reset-password
+EMAIL_VERIFICATION_TOKEN_EXPIRES_MINUTES=60
 CLIENT_OAUTH_SUCCESS_URL=https://your-frontend-domain.example/auth/callback
 CLIENT_OAUTH_FAILURE_URL=https://your-frontend-domain.example/login
+RESEND_API_KEY=<resend-api-key>
+EMAIL_FROM=Shortify <noreply@your-domain.example>
 GOOGLE_CLIENT_ID=<google-client-id>
 GOOGLE_CLIENT_SECRET=<google-client-secret>
 GOOGLE_CALLBACK_URL=https://your-api-domain.example/api/v1/auth/google/callback
@@ -132,6 +136,16 @@ Cookie notes:
 2. Copy the TLS Redis connection string.
 3. Set `REDIS_URL` on Render.
 4. Keep Redis optional for local development; backend falls back to MongoDB if Redis is unavailable.
+
+## Resend Setup
+
+1. Create a Resend account.
+2. Verify the sending domain.
+3. Create an API key for transactional emails.
+4. Set `RESEND_API_KEY` on Render.
+5. Set `EMAIL_FROM` to a verified sender, for example `Shortify <noreply@your-domain.example>`.
+6. Set `CLIENT_VERIFY_EMAIL_URL` to the frontend `/verify-email` route.
+7. Keep `CLIENT_PASSWORD_RESET_URL` pointed at the frontend password reset route.
 
 ## Google OAuth Production Setup
 
@@ -208,6 +222,10 @@ For Redis Cloud, set `REDIS_URL` in `backend/.env` and omit the `local-cache` pr
 
 * Register, login, logout.
 * Google OAuth login.
+* Credentials registration sends verification email.
+* Email verification marks the account verified.
+* Resend verification email works for unverified credentials users.
+* Password reset email is delivered through Resend.
 * Browser restart session restore.
 * Create, edit, delete, toggle links.
 * Password-protected link challenge.

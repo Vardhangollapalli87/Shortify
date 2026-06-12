@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## Phase 6E.6 - Email Verification & Email Infrastructure
+
+Status: Complete
+
+Implemented:
+
+* Added hashed, expiring email verification token fields to users.
+* Added credentials registration verification email delivery.
+* Added email verification endpoint.
+* Added resend verification endpoint.
+* Added welcome email after successful verification.
+* Replaced placeholder password reset email behavior with shared Resend delivery.
+* Added Verify Email frontend page with success, failed, and resend states.
+* Added verification-related API error mappings.
+* Added Resend and verification URL environment variable documentation.
+
+Security:
+
+* Raw verification tokens are never stored.
+* Verification tokens are single-use and expire.
+* Google users remain verified through Google email verification.
+
+Verification:
+
+* Backend lint and frontend build were run for this phase.
+
+---
+
 ## Phase 6E.5 - Deployment Readiness & Production Hardening
 
 Status: Complete

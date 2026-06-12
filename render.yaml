@@ -26,7 +26,15 @@ services:
         sync: false
       - key: CLIENT_URL
         sync: false
+      - key: CLIENT_VERIFY_EMAIL_URL
+        sync: false
       - key: CLIENT_PASSWORD_RESET_URL
+        sync: false
+      - key: EMAIL_VERIFICATION_TOKEN_EXPIRES_MINUTES
+        value: 60
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
         sync: false
       - key: CLIENT_OAUTH_SUCCESS_URL
         sync: false

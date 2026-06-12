@@ -59,6 +59,14 @@ const userSchema = new mongoose.Schema(
       type: Date,
       select: false
     },
+    emailVerificationTokenHash: {
+      type: String,
+      select: false
+    },
+    emailVerificationExpiresAt: {
+      type: Date,
+      select: false
+    },
     lastLoginAt: {
       type: Date
     }
@@ -72,6 +80,7 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ role: 1 });
 userSchema.index({ createdAt: -1 });
 userSchema.index({ passwordResetTokenHash: 1 }, { sparse: true });
+userSchema.index({ emailVerificationTokenHash: 1 }, { sparse: true });
 
 userSchema.methods.comparePassword = function comparePassword(password) {
   if (!this.passwordHash) {
@@ -87,6 +96,14 @@ userSchema.methods.createPasswordResetToken = function createPasswordResetToken(
   this.passwordResetExpiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
 
   return resetToken;
+};
+
+userSchema.methods.createEmailVerificationToken = function createEmailVerificationToken(expiresInMinutes) {
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+  this.emailVerificationTokenHash = crypto.createHash("sha256").update(verificationToken).digest("hex");
+  this.emailVerificationExpiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
+
+  return verificationToken;
 };
 
 userSchema.methods.toSafeObject = function toSafeObject() {

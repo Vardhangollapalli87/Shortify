@@ -5,7 +5,7 @@ const AppError = require("../utils/app-error");
 const { AUTH_PROVIDERS } = require("../constants/auth.constants");
 const { env } = require("../config/env");
 const { createAuthTokens, rotateRefreshToken, revokeRefreshToken } = require("./token.service");
-const { sendPasswordResetEmail } = require("./email.service");
+const { sendPasswordResetEmail, sendVerificationEmail, sendWelcomeEmail } = require("./email.service");
 const { exchangeCodeForTokens, getGoogleProfile } = require("./google-oauth.service");
 
 const PASSWORD_SALT_ROUNDS = 12;
@@ -23,7 +23,16 @@ const register = async ({ name, email, password, req }) => {
     name,
     email,
     passwordHash,
-    authProvider: AUTH_PROVIDERS.CREDENTIALS
+    authProvider: AUTH_PROVIDERS.CREDENTIALS,
+    isEmailVerified: false
+  });
+
+  const verificationToken = user.createEmailVerificationToken(env.emailVerificationTokenExpiresMinutes);
+  await user.save({ validateBeforeSave: false });
+  await sendVerificationEmail({
+    email: user.email,
+    name: user.name,
+    verificationToken
   });
 
   const tokens = await createAuthTokens({ user, req });
@@ -159,6 +168,66 @@ const forgotPassword = async ({ email }) => {
   return { queued: true };
 };
 
+const verifyEmail = async ({ token }) => {
+  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await User.findOne({
+    emailVerificationTokenHash: tokenHash,
+    emailVerificationExpiresAt: { $gt: new Date() }
+  }).select("+emailVerificationTokenHash +emailVerificationExpiresAt");
+
+  if (!user) {
+    throw new AppError("Email verification token is invalid or expired", 400, "INVALID_EMAIL_VERIFICATION_TOKEN");
+  }
+
+  if (user.isEmailVerified) {
+    throw new AppError("Email is already verified", 409, "EMAIL_ALREADY_VERIFIED");
+  }
+
+  user.isEmailVerified = true;
+  user.emailVerificationTokenHash = undefined;
+  user.emailVerificationExpiresAt = undefined;
+  await user.save({ validateBeforeSave: false });
+
+  await sendWelcomeEmail({
+    email: user.email,
+    name: user.name
+  });
+
+  return {
+    user: user.toSafeObject()
+  };
+};
+
+const resendVerificationEmail = async ({ email }) => {
+  const user = await User.findOne({ email: email.toLowerCase() }).select(
+    "+emailVerificationTokenHash +emailVerificationExpiresAt"
+  );
+
+  if (!user) {
+    return { queued: true };
+  }
+
+  if (user.isEmailVerified) {
+    throw new AppError("Email is already verified", 409, "EMAIL_ALREADY_VERIFIED");
+  }
+
+  if (user.authProvider === AUTH_PROVIDERS.GOOGLE) {
+    throw new AppError("Google accounts are already verified by Google", 409, "EMAIL_ALREADY_VERIFIED");
+  }
+
+  const verificationToken = user.createEmailVerificationToken(env.emailVerificationTokenExpiresMinutes);
+  await user.save({ validateBeforeSave: false });
+
+  await sendVerificationEmail({
+    email: user.email,
+    name: user.name,
+    verificationToken
+  });
+
+  return { queued: true };
+};
+
 const resetPassword = async ({ token, password }) => {
   const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
 
@@ -188,6 +257,8 @@ module.exports = {
   logout,
   refresh,
   forgotPassword,
+  verifyEmail,
+  resendVerificationEmail,
   resetPassword,
   authenticateWithGoogle
 };

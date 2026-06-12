@@ -14,8 +14,8 @@ export default function Register() {
     setError('');
 
     try {
-      await register(form);
-      navigate('/app');
+      const result = await register(form);
+      navigate(`/verify-email?email=${encodeURIComponent(result?.data?.user?.email || form.email)}`);
     } catch (err) {
       setError(err.message || 'Unable to create an account.');
     }

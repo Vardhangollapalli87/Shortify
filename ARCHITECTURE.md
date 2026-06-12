@@ -64,6 +64,8 @@ Email + Password
 
 Google OAuth
 
+Email verification for credentials users
+
 JWT Access Token
 
 Refresh Token Rotation
@@ -81,6 +83,16 @@ Session persistence:
 - Production cookies use `sameSite=none` and `secure=true`.
 - Duplicate refresh-token use inside `REFRESH_TOKEN_ROTATION_GRACE_SECONDS` returns session data without issuing a stale cookie overwrite.
 - Runtime URLs are provided through environment configuration only.
+
+Email verification:
+- Credentials registration creates a single-use verification token.
+- Only the SHA-256 token hash and expiration timestamp are stored.
+- Verification clears token fields, marks `isEmailVerified=true`, and sends a welcome email.
+- Google users remain verified based on Google profile email verification.
+
+Transactional email:
+- Resend delivers verification, welcome, and password reset emails.
+- Email links use `CLIENT_VERIFY_EMAIL_URL` and `CLIENT_PASSWORD_RESET_URL`.
 
 ---
 

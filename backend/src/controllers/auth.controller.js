@@ -11,7 +11,9 @@ const {
   validateForgotPasswordPayload,
   validateLoginPayload,
   validateRegisterPayload,
-  validateResetPasswordPayload
+  validateResendVerificationPayload,
+  validateResetPasswordPayload,
+  validateVerifyEmailPayload
 } = require("../validators/auth.validator");
 
 const getRefreshCookieOptions = () => ({
@@ -165,6 +167,20 @@ const forgotPassword = catchAsync(async (req, res) => {
   );
 });
 
+const verifyEmail = catchAsync(async (req, res) => {
+  const payload = validateVerifyEmailPayload(req.body);
+  const result = await authService.verifyEmail(payload);
+
+  return sendResponse(res, 200, result, "Email verified successfully");
+});
+
+const resendVerificationEmail = catchAsync(async (req, res) => {
+  const payload = validateResendVerificationPayload(req.body);
+  await authService.resendVerificationEmail(payload);
+
+  return sendResponse(res, 200, null, "If verification is required, a new email has been sent");
+});
+
 const resetPassword = catchAsync(async (req, res) => {
   const payload = validateResetPasswordPayload(req.body);
   const result = await authService.resetPassword(payload);
@@ -179,6 +195,8 @@ module.exports = {
   logout,
   getMe,
   forgotPassword,
+  verifyEmail,
+  resendVerificationEmail,
   resetPassword,
   startGoogleOAuth,
   googleOAuthCallback

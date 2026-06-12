@@ -11,6 +11,7 @@ const requiredEnvVars = [
   "GOOGLE_CALLBACK_URL",
   "CORS_ORIGINS",
   "CLIENT_URL",
+  "CLIENT_VERIFY_EMAIL_URL",
   "CLIENT_PASSWORD_RESET_URL",
   "CLIENT_OAUTH_SUCCESS_URL",
   "CLIENT_OAUTH_FAILURE_URL"
@@ -57,8 +58,12 @@ const env = {
   refreshTokenCookieName: process.env.REFRESH_TOKEN_COOKIE_NAME || "shortify_refresh_token",
   cookieDomain: process.env.COOKIE_DOMAIN || undefined,
   clientUrl: process.env.CLIENT_URL,
+  clientVerifyEmailUrl: process.env.CLIENT_VERIFY_EMAIL_URL,
+  emailVerificationTokenExpiresMinutes: parseNumber(process.env.EMAIL_VERIFICATION_TOKEN_EXPIRES_MINUTES, 60),
   passwordResetTokenExpiresMinutes: parseNumber(process.env.PASSWORD_RESET_TOKEN_EXPIRES_MINUTES, 15),
   clientPasswordResetUrl: process.env.CLIENT_PASSWORD_RESET_URL,
+  resendApiKey: process.env.RESEND_API_KEY,
+  emailFrom: process.env.EMAIL_FROM,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,
@@ -80,6 +85,7 @@ const validateEnv = () => {
 
   const insecureUrlVars = [
     ["CLIENT_URL", env.clientUrl],
+    ["CLIENT_VERIFY_EMAIL_URL", env.clientVerifyEmailUrl],
     ["CLIENT_PASSWORD_RESET_URL", env.clientPasswordResetUrl],
     ["CLIENT_OAUTH_SUCCESS_URL", env.clientOAuthSuccessUrl],
     ["CLIENT_OAUTH_FAILURE_URL", env.clientOAuthFailureUrl],
@@ -97,6 +103,12 @@ const validateEnv = () => {
 
   if (env.jwtAccessSecret.length < 32 || env.jwtRefreshSecret.length < 32) {
     throw new Error("Production JWT secrets must be at least 32 characters long");
+  }
+
+  const missingEmailVars = ["RESEND_API_KEY", "EMAIL_FROM"].filter((key) => !process.env[key]);
+
+  if (missingEmailVars.length > 0) {
+    throw new Error(`Missing required production email environment variables: ${missingEmailVars.join(", ")}`);
   }
 };
 

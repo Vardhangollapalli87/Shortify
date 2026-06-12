@@ -11,6 +11,8 @@ A production-grade URL Shortener SaaS platform built with Node.js, Express, Mong
 * Refresh Token Rotation
 * Google OAuth Login
 * Password Reset Flow
+* Email Verification
+* Resend Transactional Emails
 
 ### URL Management
 
@@ -90,6 +92,8 @@ Phase 6B - Dashboard MVP ✅
 Phase 6C - Links Management Page ✅
 
 Phase 6E.5 - Deployment Readiness & Production Hardening ✅
+
+Phase 6E.6 - Email Verification & Email Infrastructure ✅
 
 ---
 

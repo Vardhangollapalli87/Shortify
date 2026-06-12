@@ -5,6 +5,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import OAuthCallback from './pages/OAuthCallback';
+import VerifyEmail from './pages/VerifyEmail';
 import PasswordChallenge from './pages/PasswordChallenge';
 import Dashboard from './pages/Dashboard';
 import LinksPage from './pages/Links';
@@ -34,6 +35,8 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/auth/callback" element={<OAuthCallback />} />
       <Route path="/auth/oauth/callback" element={<OAuthCallback />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/resend-verification" element={<VerifyEmail />} />
       <Route path="/links/password/:shortCode" element={<PasswordChallenge />} />
       <Route
         path="/dashboard"

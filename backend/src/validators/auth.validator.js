@@ -93,9 +93,34 @@ const validateResetPasswordPayload = (payload) => {
   };
 };
 
+const validateVerifyEmailPayload = (payload) => {
+  const errors = [];
+  const token = validateRequiredString(payload.token, "token", errors);
+  throwIfErrors(errors);
+
+  return { token };
+};
+
+const validateResendVerificationPayload = (payload) => {
+  const errors = [];
+  const email = validateRequiredString(payload.email, "email", errors);
+
+  if (email && !validator.isEmail(email)) {
+    errors.push({ field: "email", message: "Email is invalid" });
+  }
+
+  throwIfErrors(errors);
+
+  return {
+    email: email.toLowerCase()
+  };
+};
+
 module.exports = {
   validateRegisterPayload,
   validateLoginPayload,
   validateForgotPasswordPayload,
-  validateResetPasswordPayload
+  validateResetPasswordPayload,
+  validateVerifyEmailPayload,
+  validateResendVerificationPayload
 };
