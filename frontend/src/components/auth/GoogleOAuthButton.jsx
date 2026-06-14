@@ -11,9 +11,9 @@ const getGoogleOAuthUrl = () => {
 export const GoogleOAuthButton = ({ label = 'Continue with Google' }) => (
   <a
     href={getGoogleOAuthUrl()}
-    className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-400/50 hover:text-cyan-100"
+    className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-slate-500 hover:bg-slate-900"
   >
-    <span className="grid h-5 w-5 place-items-center rounded-full bg-white text-xs font-bold text-slate-900">G</span>
+    <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-xs font-bold text-slate-900">G</span>
     {label}
   </a>
 );
