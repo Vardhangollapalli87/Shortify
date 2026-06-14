@@ -1,30 +1,72 @@
+import { buildShortLink } from '../../lib/shortLinks';
+import { formatLocalDateTime } from '../../lib/dateTime';
+import { Badge } from '../ui/Feedback';
+import { CopyButton } from './CopyButton';
+import { LinkActions } from './LinkActions';
 import { LinkRow } from './LinkRow';
+import { StatusBadge } from './StatusBadge';
+
+const formatDate = (value) => {
+  if (!value) return 'Not available';
+
+  return new Date(value).toLocaleDateString('en', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+};
+
+const MobileLinkCard = ({ link, onEdit, onDelete, onToggle, onView, onQr, onCopy, onCopyError }) => (
+  <article className="rounded-xl border border-slate-800 bg-slate-950 p-4">
+    <div className="flex items-start justify-between gap-3">
+      <div className="min-w-0">
+        <p className="truncate text-base font-semibold text-cyan-100">/{link.shortCode}</p>
+        <p className="mt-1 truncate text-xs uppercase tracking-[0.14em] text-slate-500">{link.title || 'Untitled link'}</p>
+      </div>
+      <StatusBadge isActive={link.isActive} />
+    </div>
+    <p className="mt-3 break-all text-sm text-slate-400">{link.originalUrl}</p>
+    <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-400">
+      <div className="rounded-lg border border-slate-800 bg-slate-900 p-3">Clicks<br /><span className="text-lg font-semibold text-white">{link.totalClicks ?? 0}</span></div>
+      <div className="rounded-lg border border-slate-800 bg-slate-900 p-3">Created<br /><span className="text-sm font-semibold text-white">{formatDate(link.createdAt)}</span></div>
+      <div className="col-span-2 rounded-lg border border-slate-800 bg-slate-900 p-3">Expires<br /><span className="text-sm font-semibold text-white">{formatLocalDateTime(link.expiresAt)}</span></div>
+    </div>
+    <div className="mt-4 flex flex-wrap gap-2">
+      {link.isPasswordProtected ? <Badge tone="violet">Protected</Badge> : <Badge tone="neutral">Public</Badge>}
+      <Badge tone="neutral">{buildShortLink(link.shortCode)}</Badge>
+    </div>
+    <div className="mt-4 flex flex-wrap gap-2">
+      <CopyButton value={buildShortLink(link.shortCode)} onCopy={onCopy} onError={onCopyError} />
+      <LinkActions onEdit={onEdit} onDelete={onDelete} onToggle={onToggle} onView={onView} onQr={onQr} isActive={link.isActive} />
+    </div>
+  </article>
+);
 
 export const LinkTable = ({ links, onEdit, onDelete, onToggle, onView, onQr, onCopy, onCopyError }) => (
-  <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/20">
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <section className="rounded-xl border border-slate-800 bg-slate-900/90 shadow-xl shadow-black/20">
+    <div className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-800 p-5">
       <div>
-        <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Links</p>
-        <h2 className="mt-2 text-xl font-semibold text-white">Your short links</h2>
-        <p className="mt-2 text-sm text-slate-300">Create, edit, protect, and manage links from one protected workspace.</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">Links</p>
+        <h2 className="mt-2 text-xl font-semibold text-white">Short link inventory</h2>
+        <p className="mt-2 text-sm text-slate-400">Search, compare, protect, and operate every short link from one table.</p>
       </div>
-      <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1 text-xs uppercase tracking-[0.3em] text-slate-300">{links.length} total</span>
+      <Badge tone="neutral">{links.length} total</Badge>
     </div>
 
-    <div className="overflow-x-auto rounded-2xl border border-slate-800">
-      <table className="min-w-full divide-y divide-slate-800 text-left text-sm text-slate-200">
-        <thead className="bg-slate-950/90 text-slate-300">
+    <div className="hidden overflow-x-auto lg:block">
+      <table className="min-w-full text-left text-sm text-slate-200">
+        <thead className="border-b border-slate-800 bg-slate-950/80 text-xs uppercase tracking-[0.14em] text-slate-500">
           <tr>
-            <th className="px-4 py-3 font-medium">Link</th>
-            <th className="px-4 py-3 font-medium">Original URL</th>
-            <th className="px-4 py-3 font-medium">Status</th>
-            <th className="px-4 py-3 font-medium">Clicks</th>
-            <th className="px-4 py-3 font-medium">Created</th>
-            <th className="px-4 py-3 font-medium">Expires</th>
-            <th className="px-4 py-3 font-medium">Actions</th>
+            <th className="px-5 py-3 font-semibold">Link</th>
+            <th className="px-5 py-3 font-semibold">Destination</th>
+            <th className="px-5 py-3 font-semibold">Status</th>
+            <th className="px-5 py-3 font-semibold">Clicks</th>
+            <th className="px-5 py-3 font-semibold">Created</th>
+            <th className="px-5 py-3 font-semibold">Expires</th>
+            <th className="px-5 py-3 font-semibold">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-800 bg-slate-900/70">
+        <tbody className="divide-y divide-slate-800">
           {links.map((link) => (
             <LinkRow
               key={link.id}
@@ -40,6 +82,26 @@ export const LinkTable = ({ links, onEdit, onDelete, onToggle, onView, onQr, onC
           ))}
         </tbody>
       </table>
+    </div>
+
+    <div className="grid gap-3 p-4 lg:hidden">
+      {links.map((link) => (
+        <MobileLinkCard
+          key={link.id}
+          link={link}
+          onEdit={() => onEdit(link)}
+          onDelete={() => onDelete(link)}
+          onToggle={() => onToggle(link)}
+          onView={() => onView(link)}
+          onQr={() => onQr(link)}
+          onCopy={onCopy}
+          onCopyError={onCopyError}
+        />
+      ))}
+    </div>
+
+    <div className="border-t border-slate-800 px-5 py-4 text-sm text-slate-500">
+      Showing {links.length} {links.length === 1 ? 'link' : 'links'}
     </div>
   </section>
 );

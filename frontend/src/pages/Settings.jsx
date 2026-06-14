@@ -2,6 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from '../components/links/Toast';
+import { Button } from '../components/ui/Button';
+import { Card, CardBody, CardHeader } from '../components/ui/Card';
+import { Alert, Badge, Skeleton } from '../components/ui/Feedback';
+import { Field, Input } from '../components/ui/Form';
+import { PageHeader } from '../components/ui/PageHeader';
 import { useAuth } from '../context/AuthProvider';
 import { changeCurrentUserPassword, deleteCurrentUserAccount, getCurrentUserProfile, updateCurrentUserProfile } from '../services/users.service';
 
@@ -17,15 +22,11 @@ const formatDate = (value) => {
   });
 };
 
-const providerLabel = (provider) => {
-  const labels = {
-    credentials: 'Email and password',
-    google: 'Google',
-    mixed: 'Email and Google'
-  };
-
-  return labels[provider] || 'Unknown';
-};
+const providerLabel = (provider) => ({
+  credentials: 'Email and password',
+  google: 'Google',
+  mixed: 'Email and Google'
+}[provider] || 'Unknown');
 
 const passwordChecks = (password) => [
   ['At least 8 characters', password.length >= 8],
@@ -37,7 +38,6 @@ const passwordChecks = (password) => [
 
 const strengthLabel = (checks) => {
   const passed = checks.filter(([, isMet]) => isMet).length;
-
   if (passed <= 2) return 'Weak';
   if (passed <= 4) return 'Good';
   return 'Strong';
@@ -45,12 +45,20 @@ const strengthLabel = (checks) => {
 
 const canUsePassword = (authProvider) => authProvider === 'credentials' || authProvider === 'mixed';
 
-const SettingsSection = ({ eyebrow, title, children }) => (
-  <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl shadow-black/20">
-    <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">{eyebrow}</p>
-    <h2 className="mt-2 text-xl font-semibold text-white">{title}</h2>
-    <div className="mt-5">{children}</div>
-  </section>
+const PasswordInput = ({ label, value, onChange, visible, onToggle }) => (
+  <Field label={label}>
+    <div className="flex rounded-lg border border-slate-700 bg-slate-950 focus-within:border-cyan-400">
+      <input
+        type={visible ? 'text' : 'password'}
+        value={value}
+        onChange={onChange}
+        className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-slate-100 outline-none"
+      />
+      <button type="button" onClick={onToggle} className="px-4 text-xs font-semibold text-cyan-200">
+        {visible ? 'Hide' : 'Show'}
+      </button>
+    </div>
+  </Field>
 );
 
 export default function SettingsPage() {
@@ -83,6 +91,7 @@ export default function SettingsPage() {
   const passwordStrength = strengthLabel(checks);
   const passwordEnabled = canUsePassword(activeProfile?.authProvider);
   const confirmationMatches = deleteConfirmation === 'DELETE';
+  const initials = activeProfile?.name?.slice(0, 1)?.toUpperCase() || activeProfile?.email?.slice(0, 1)?.toUpperCase() || 'S';
 
   const showToast = (message, tone = 'success') => {
     setToast({ message, tone });
@@ -157,142 +166,140 @@ export default function SettingsPage() {
   };
 
   if (isLoading) {
-    return <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 text-slate-200">Loading account settings...</div>;
+    return <Skeleton className="h-96" />;
   }
 
   if (error) {
-    return <div className="rounded-2xl border border-rose-400/30 bg-rose-400/10 p-6 text-rose-100">{error.message || 'Unable to load settings.'}</div>;
+    return <Alert tone="error">{error.message || 'Unable to load settings.'}</Alert>;
   }
 
   return (
-    <div className="space-y-6">
-      <header className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 p-6 shadow-2xl shadow-black/30">
-        <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">Settings</p>
-        <h1 className="mt-3 text-3xl font-semibold text-white">Account management</h1>
-        <p className="mt-2 max-w-2xl text-slate-300">Manage your profile, sign-in method, session details, and account lifecycle.</p>
-      </header>
+    <div className="space-y-5">
+      <PageHeader eyebrow="Settings" title="Account management" description="Manage identity, security, connected accounts, session details, and account lifecycle." />
 
-      <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-        <SettingsSection eyebrow="Profile" title="Personal information">
-          <div className="flex flex-col gap-6 lg:flex-row">
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-slate-700 bg-slate-950 text-3xl font-semibold text-cyan-100">
-              {activeProfile?.avatarUrl ? <img src={activeProfile.avatarUrl} alt="" className="h-full w-full object-cover" /> : activeProfile?.name?.slice(0, 1)}
-            </div>
-            <form className="grid flex-1 gap-4" onSubmit={submitProfile}>
-              <label className="space-y-2 text-sm text-slate-200">
-                <span>Name</span>
-                <input value={profileForm.name} onChange={(event) => setProfileForm({ ...profileForm, name: event.target.value })} className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400" />
-              </label>
-              <label className="space-y-2 text-sm text-slate-200">
-                <span>Avatar URL</span>
-                <input value={profileForm.avatarUrl} onChange={(event) => setProfileForm({ ...profileForm, avatarUrl: event.target.value })} className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400" placeholder="https://example.com/avatar.png" />
-              </label>
-              <div className="grid gap-3 text-sm text-slate-300 md:grid-cols-2">
-                <div>Email<br /><span className="text-slate-100">{activeProfile?.email}</span></div>
-                <div>Auth provider<br /><span className="text-slate-100">{providerLabel(activeProfile?.authProvider)}</span></div>
-                <div>Joined<br /><span className="text-slate-100">{formatDate(activeProfile?.createdAt)}</span></div>
+      <div className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <Card>
+          <CardHeader eyebrow="Profile" title="Personal information" description="Keep your workspace identity current." />
+          <CardBody>
+            <div className="flex flex-col gap-6 lg:flex-row">
+              <div className="shrink-0">
+                <div className="grid h-24 w-24 place-items-center overflow-hidden rounded-xl border border-slate-700 bg-slate-950 text-3xl font-semibold text-cyan-100">
+                  {activeProfile?.avatarUrl ? <img src={activeProfile.avatarUrl} alt="" className="h-full w-full object-cover" /> : initials}
+                </div>
+                <p className="mt-3 text-xs leading-5 text-slate-500">Avatar URL today. Upload-ready layout for future storage.</p>
               </div>
-              <button type="submit" disabled={profileMutation.isPending} className="w-fit rounded-xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 disabled:opacity-60">
-                {profileMutation.isPending ? 'Saving...' : 'Save profile'}
-              </button>
-            </form>
-          </div>
-        </SettingsSection>
+              <form className="grid flex-1 gap-4" onSubmit={submitProfile}>
+                <Field label="Name">
+                  <Input value={profileForm.name} onChange={(event) => setProfileForm({ ...profileForm, name: event.target.value })} />
+                </Field>
+                <Field label="Avatar URL">
+                  <Input value={profileForm.avatarUrl} onChange={(event) => setProfileForm({ ...profileForm, avatarUrl: event.target.value })} placeholder="https://example.com/avatar.png" />
+                </Field>
+                <div className="grid gap-3 text-sm text-slate-400 md:grid-cols-3">
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">Email<br /><span className="text-slate-100">{activeProfile?.email}</span></div>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">Provider<br /><span className="text-slate-100">{providerLabel(activeProfile?.authProvider)}</span></div>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">Verified<br /><span className="text-slate-100">{activeProfile?.isEmailVerified ? 'Yes' : 'No'}</span></div>
+                </div>
+                <Button type="submit" disabled={profileMutation.isPending} className="w-fit">
+                  {profileMutation.isPending ? 'Saving...' : 'Save profile'}
+                </Button>
+              </form>
+            </div>
+          </CardBody>
+        </Card>
 
-        <SettingsSection eyebrow="Connected" title="Connected account">
-          <div className="space-y-4 text-sm text-slate-300">
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-              Google status<br />
-              <span className="text-lg font-semibold text-white">{activeProfile?.googleId ? 'Connected' : 'Not connected'}</span>
+        <Card>
+          <CardHeader eyebrow="Connected" title="Connected accounts" description="Review account providers and sign-in coverage." />
+          <CardBody className="grid gap-3">
+            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="font-semibold text-white">Google</p>
+                  <p className="mt-1 text-sm text-slate-500">OAuth provider status</p>
+                </div>
+                <Badge tone={activeProfile?.googleId ? 'success' : 'neutral'}>{activeProfile?.googleId ? 'Connected' : 'Not connected'}</Badge>
+              </div>
             </div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-              Sign-in method<br />
-              <span className="text-lg font-semibold text-white">{providerLabel(activeProfile?.authProvider)}</span>
+            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
+              <p className="text-sm text-slate-500">Sign-in method</p>
+              <p className="mt-2 text-lg font-semibold text-white">{providerLabel(activeProfile?.authProvider)}</p>
             </div>
-          </div>
-        </SettingsSection>
+            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
+              <p className="text-sm text-slate-500">Joined</p>
+              <p className="mt-2 text-lg font-semibold text-white">{formatDate(activeProfile?.createdAt)}</p>
+            </div>
+          </CardBody>
+        </Card>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-        <SettingsSection eyebrow="Security" title="Password">
-          {passwordEnabled ? (
-            <form className="grid gap-4" onSubmit={submitPassword}>
-              {[
-                ['currentPassword', 'Current password', 'current'],
-                ['newPassword', 'New password', 'next'],
-                ['confirmPassword', 'Confirm password', 'confirm']
-              ].map(([field, label, key]) => (
-                <label key={field} className="space-y-2 text-sm text-slate-200">
-                  <span>{label}</span>
-                  <div className="flex rounded-xl border border-slate-700 bg-slate-950 focus-within:border-cyan-400">
-                    <input
-                      type={showPasswords[key] ? 'text' : 'password'}
-                      value={passwordForm[field]}
-                      onChange={(event) => setPasswordForm({ ...passwordForm, [field]: event.target.value })}
-                      className="min-w-0 flex-1 bg-transparent px-4 py-3 text-slate-100 outline-none"
-                    />
-                    <button type="button" onClick={() => setShowPasswords({ ...showPasswords, [key]: !showPasswords[key] })} className="px-4 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">
-                      {showPasswords[key] ? 'Hide' : 'Show'}
-                    </button>
+      <div className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <Card>
+          <CardHeader eyebrow="Security" title="Password" description={passwordEnabled ? 'Change your password and review strength requirements.' : 'This account uses Google-managed authentication.'} />
+          <CardBody>
+            {passwordEnabled ? (
+              <form className="grid gap-4" onSubmit={submitPassword}>
+                <PasswordInput label="Current password" value={passwordForm.currentPassword} visible={showPasswords.current} onToggle={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })} onChange={(event) => setPasswordForm({ ...passwordForm, currentPassword: event.target.value })} />
+                <PasswordInput label="New password" value={passwordForm.newPassword} visible={showPasswords.next} onToggle={() => setShowPasswords({ ...showPasswords, next: !showPasswords.next })} onChange={(event) => setPasswordForm({ ...passwordForm, newPassword: event.target.value })} />
+                <PasswordInput label="Confirm password" value={passwordForm.confirmPassword} visible={showPasswords.confirm} onToggle={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })} onChange={(event) => setPasswordForm({ ...passwordForm, confirmPassword: event.target.value })} />
+                <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm font-semibold text-white">Password strength</p>
+                    <Badge tone={passwordStrength === 'Strong' ? 'success' : passwordStrength === 'Good' ? 'warning' : 'danger'}>{passwordStrength}</Badge>
                   </div>
-                </label>
-              ))}
-
-              <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-semibold text-white">Password strength</p>
-                  <span className="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-200">{passwordStrength}</span>
+                  <div className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+                    {checks.map(([label, isMet]) => (
+                      <p key={label} className={isMet ? 'text-emerald-200' : 'text-slate-500'}>{isMet ? '✓' : '✗'} {label}</p>
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-3 grid gap-2 text-sm">
-                  {checks.map(([label, isMet]) => (
-                    <p key={label} className={isMet ? 'text-emerald-200' : 'text-slate-400'}>{isMet ? '✓' : '✗'} {label}</p>
-                  ))}
-                </div>
-              </div>
+                <Button type="submit" disabled={passwordMutation.isPending} className="w-fit">
+                  {passwordMutation.isPending ? 'Changing...' : 'Change password'}
+                </Button>
+              </form>
+            ) : (
+              <Alert tone="info">Password managed through Google.</Alert>
+            )}
+          </CardBody>
+        </Card>
 
-              <button type="submit" disabled={passwordMutation.isPending} className="w-fit rounded-xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 disabled:opacity-60">
-                {passwordMutation.isPending ? 'Changing...' : 'Change password'}
-              </button>
-            </form>
-          ) : (
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5 text-slate-300">Password managed through Google</div>
-          )}
-        </SettingsSection>
-
-        <SettingsSection eyebrow="Session" title="Session information">
-          <div className="grid gap-3 text-sm text-slate-300">
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">Current login method<br /><span className="text-lg font-semibold text-white">{providerLabel(activeProfile?.authProvider)}</span></div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">Last login<br /><span className="text-lg font-semibold text-white">{formatDate(activeProfile?.lastLoginAt)}</span></div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">Account creation<br /><span className="text-lg font-semibold text-white">{formatDate(activeProfile?.createdAt)}</span></div>
-          </div>
-        </SettingsSection>
+        <Card>
+          <CardHeader eyebrow="Session" title="Session information" description="Current account timestamps and sign-in method." />
+          <CardBody className="grid gap-3">
+            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">Current login method<br /><span className="text-lg font-semibold text-white">{providerLabel(activeProfile?.authProvider)}</span></div>
+            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">Last login<br /><span className="text-lg font-semibold text-white">{formatDate(activeProfile?.lastLoginAt)}</span></div>
+            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">Account creation<br /><span className="text-lg font-semibold text-white">{formatDate(activeProfile?.createdAt)}</span></div>
+          </CardBody>
+        </Card>
       </div>
 
-      <SettingsSection eyebrow="Danger Zone" title="Delete account">
-        <div className="flex flex-col gap-4 rounded-2xl border border-rose-400/30 bg-rose-400/10 p-5 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 className="font-semibold text-white">Permanently delete this account</h3>
-            <p className="mt-1 text-sm text-rose-100">This removes your account, owned links, and active sessions. This action cannot be undone.</p>
+      <Card>
+        <CardHeader eyebrow="Danger Zone" title="Delete account" description="Permanent account deletion removes account data, owned links, and active sessions." />
+        <CardBody>
+          <div className="flex flex-col gap-4 rounded-lg border border-rose-400/30 bg-rose-400/10 p-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h3 className="font-semibold text-white">Permanently delete this account</h3>
+              <p className="mt-1 text-sm text-rose-100">This action cannot be undone.</p>
+            </div>
+            <Button type="button" onClick={() => setIsDeleteOpen(true)} variant="danger">Delete account</Button>
           </div>
-          <button type="button" onClick={() => setIsDeleteOpen(true)} className="rounded-xl bg-rose-500 px-5 py-3 text-sm font-semibold text-white">Delete account</button>
-        </div>
-      </SettingsSection>
+        </CardBody>
+      </Card>
 
       {isDeleteOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-950 p-6 shadow-2xl shadow-black/40">
-            <p className="text-xs uppercase tracking-[0.35em] text-rose-300">Delete account</p>
-            <h2 className="mt-2 text-2xl font-semibold text-white">This action is irreversible</h2>
-            <p className="mt-3 text-sm text-slate-300">Type DELETE to confirm account deletion. All owned short links and active sessions will be removed.</p>
-            <input value={deleteConfirmation} onChange={(event) => setDeleteConfirmation(event.target.value)} className="mt-5 w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none focus:border-rose-400" placeholder="DELETE" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
+          <div className="w-full max-w-lg rounded-xl border border-slate-800 bg-slate-950 p-6 shadow-2xl shadow-black/50" role="dialog" aria-modal="true" aria-labelledby="delete-account-title">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-300">Delete account</p>
+            <h2 id="delete-account-title" className="mt-2 text-2xl font-semibold text-white">This action is irreversible</h2>
+            <p className="mt-3 text-sm text-slate-400">Type DELETE to confirm account deletion. All owned short links and active sessions will be removed.</p>
+            <Input value={deleteConfirmation} onChange={(event) => setDeleteConfirmation(event.target.value)} className="mt-5" placeholder="DELETE" />
             <div className="mt-6 flex justify-end gap-3">
-              <button type="button" onClick={() => {
+              <Button type="button" onClick={() => {
                 setIsDeleteOpen(false);
                 setDeleteConfirmation('');
-              }} className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-100">Cancel</button>
-              <button type="button" disabled={!confirmationMatches || deleteMutation.isPending} onClick={() => deleteMutation.mutate()} className="rounded-xl bg-rose-500 px-4 py-3 text-sm font-semibold text-white disabled:opacity-50">
+              }} variant="secondary">Cancel</Button>
+              <Button type="button" disabled={!confirmationMatches || deleteMutation.isPending} onClick={() => deleteMutation.mutate()} variant="danger">
                 {deleteMutation.isPending ? 'Deleting...' : 'Delete account'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

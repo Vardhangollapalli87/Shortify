@@ -1,19 +1,19 @@
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const TimeSeriesChart = ({ data = [] }) => (
-  <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30">
+  <section className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 shadow-xl shadow-black/20">
     <div className="mb-6 flex items-end justify-between gap-3">
       <div>
-        <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Trend</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">Trend</p>
         <h2 className="mt-2 text-xl font-semibold text-white">Clicks over time</h2>
-        <p className="mt-2 text-slate-300">A daily view of engagement for the selected short link.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-400">A daily view of engagement for the selected short link.</p>
       </div>
-      <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-emerald-200">Live data</span>
+      <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-200">Live data</span>
     </div>
 
     <div className="h-80 w-full">
       {data.length === 0 ? (
-        <div className="flex h-full items-center justify-center rounded-3xl border border-dashed border-slate-700 bg-slate-950/70 text-slate-300">No time-series data available for this link yet.</div>
+        <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-slate-700 bg-slate-950 text-center text-sm text-slate-400">No time-series data available for this link yet.</div>
       ) : (
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>

@@ -1,17 +1,25 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { ProtectedLayout } from './layouts/ProtectedLayout';
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import OAuthCallback from './pages/OAuthCallback';
-import VerifyEmail from './pages/VerifyEmail';
-import PasswordChallenge from './pages/PasswordChallenge';
-import Dashboard from './pages/Dashboard';
-import LinksPage from './pages/Links';
-import AnalyticsPage from './pages/Analytics';
-import SettingsPage from './pages/Settings';
 import { useAuth } from './context/AuthProvider';
+
+const Landing = lazy(() => import('./pages/Landing'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const OAuthCallback = lazy(() => import('./pages/OAuthCallback'));
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
+const PasswordChallenge = lazy(() => import('./pages/PasswordChallenge'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const LinksPage = lazy(() => import('./pages/Links'));
+const AnalyticsPage = lazy(() => import('./pages/Analytics'));
+const SettingsPage = lazy(() => import('./pages/Settings'));
+
+const PageLoader = () => (
+  <div className="grid min-h-screen place-items-center bg-slate-950 text-sm font-medium text-slate-300">Loading Shortify...</div>
+);
 
 const RootRoute = () => {
   const { user, loading } = useAuth();
@@ -29,10 +37,13 @@ const RootRoute = () => {
 
 export default function App() {
   return (
-    <Routes>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
       <Route path="/" element={<RootRoute />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/auth/callback" element={<OAuthCallback />} />
       <Route path="/auth/oauth/callback" element={<OAuthCallback />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
@@ -92,6 +103,7 @@ export default function App() {
         <Route path="settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }
