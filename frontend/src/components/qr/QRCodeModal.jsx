@@ -20,18 +20,19 @@ export const QRCodeModal = ({ isOpen, link, onClose, onCopy, onCopyError }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur">
-      <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl shadow-black/40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4 py-6" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+      <div className="app-panel max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-lg border p-6 shadow-xl" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
         <div className="flex flex-col gap-4 border-b border-slate-800 pb-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">QR code</p>
-            <h2 className="mt-2 text-2xl font-semibold text-white">/{link.shortCode}</h2>
+            <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">QR code</p>
+            <h2 id="qr-modal-title" className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">/{link.shortCode}</h2>
             <p className="mt-2 break-all text-sm text-slate-300">{shortUrl}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-cyan-400/40 hover:text-cyan-100"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:bg-slate-800"
+            aria-label="Close QR code dialog"
           >
             Close
           </button>
@@ -41,12 +42,12 @@ export const QRCodeModal = ({ isOpen, link, onClose, onCopy, onCopyError }) => {
           <QRCodePreview value={shortUrl} renderKey={renderKey} onCanvasReady={setCanvas} />
 
           <div className="space-y-5">
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950">
               <p className="text-sm font-semibold text-white">Destination</p>
               <p className="mt-2 break-all text-sm text-slate-400">{link.originalUrl}</p>
             </div>
 
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950">
               <p className="text-sm font-semibold text-white">Status</p>
               <div className="mt-3 flex flex-wrap gap-2 text-xs uppercase tracking-[0.25em]">
                 <span className={`rounded-full border px-3 py-1 ${link.isActive ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100' : 'border-amber-400/30 bg-amber-400/10 text-amber-100'}`}>

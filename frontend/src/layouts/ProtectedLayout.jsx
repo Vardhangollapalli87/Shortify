@@ -1,18 +1,20 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from '../components/layout/Navbar';
-import { MobileNav, Sidebar } from '../components/layout/Sidebar';
+import { Sidebar } from '../components/layout/Sidebar';
 
-export const ProtectedLayout = () => (
-  <div className="premium-shell min-h-screen text-slate-100">
-    <div className="mx-auto flex min-h-screen max-w-[1800px]">
-      <Sidebar />
-      <main className="flex min-w-0 flex-1 flex-col">
-        <Navbar />
-        <section className="flex-1 px-4 py-5 sm:px-6 lg:px-8">
+export const ProtectedLayout = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <div className="app-shell min-h-screen">
+      <Sidebar isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <div className="min-h-screen lg:pl-64">
+        <Navbar onMenuOpen={() => setIsMenuOpen(true)} />
+        <main className="mx-auto w-full max-w-[1600px] px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
           <Outlet />
-        </section>
-        <MobileNav />
-      </main>
+        </main>
+      </div>
     </div>
-  </div>
-);
+  );
+};

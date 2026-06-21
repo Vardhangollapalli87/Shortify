@@ -1,11 +1,11 @@
-const baseControl = 'w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 transition placeholder:text-slate-500 focus:border-cyan-400';
+const baseControl = 'w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 transition placeholder:text-slate-400 focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500';
 
 export const Field = ({ label, hint, error, children }) => (
-  <label className="block space-y-2 text-sm text-slate-200">
+  <label className="block space-y-2 text-sm text-slate-700 dark:text-slate-200">
     <span className="font-medium">{label}</span>
     {children}
-    {hint && !error ? <span className="block text-xs leading-5 text-slate-500">{hint}</span> : null}
-    {error ? <span className="block text-xs leading-5 text-rose-300">{error}</span> : null}
+    {hint && !error ? <span className="block text-xs leading-5 text-slate-500 dark:text-slate-400">{hint}</span> : null}
+    {error ? <span className="block text-xs leading-5 text-red-600 dark:text-red-400">{error}</span> : null}
   </label>
 );
 

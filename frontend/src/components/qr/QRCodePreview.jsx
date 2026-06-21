@@ -39,14 +39,14 @@ export const QRCodePreview = ({ value, renderKey, onCanvasReady }) => {
 
   if (result.error || drawError) {
     return (
-      <div className="flex min-h-[280px] items-center justify-center rounded-2xl border border-rose-500/30 bg-rose-500/10 p-6 text-center text-sm text-rose-100">
+      <div className="flex min-h-[280px] items-center justify-center rounded-lg border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
         {result.error || drawError}
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-white p-4 shadow-xl shadow-black/20">
+    <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       {status === 'loading' ? (
         <div className="flex min-h-[280px] items-center justify-center rounded-xl bg-slate-100 text-sm font-medium text-slate-600">
           Generating QR code

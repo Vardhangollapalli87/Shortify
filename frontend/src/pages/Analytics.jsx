@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAnalyticsOverview, useSelectedLinkAnalytics, useUserLinks } from '../hooks/useAnalytics';
 import { AnalyticsFilters } from '../components/analytics/AnalyticsFilters';
 import { AnalyticsSummaryCards } from '../components/analytics/AnalyticsSummaryCards';
@@ -51,7 +52,7 @@ export default function AnalyticsPage() {
     return (
       <div className="space-y-5">
         <PageHeader eyebrow="Analytics" title="Analytics overview" description="Create at least one short link to unlock reports, trend charts, and audience breakdowns." />
-        <EmptyState title="No links to analyze yet" description="Add your first short link to start viewing analytics insight in this workspace." action={<Button as="a" href="/links">Create link</Button>} />
+        <EmptyState title="No links to analyze yet" description="Add your first short link to start viewing analytics insight in this workspace." action={<Button as={Link} to="/links">Create link</Button>} />
       </div>
     );
   }

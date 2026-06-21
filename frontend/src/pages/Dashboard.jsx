@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../components/ui/Card';
-import { Badge, EmptyState, Skeleton } from '../components/ui/Feedback';
+import { EmptyState, Skeleton } from '../components/ui/Feedback';
 import { PageHeader } from '../components/ui/PageHeader';
 import { getOverviewAnalytics, getTopLinksAnalytics } from '../services/analytics.service';
 
 const numberFormat = new Intl.NumberFormat('en');
 
-const KpiCard = ({ label, value, hint, tone = 'info' }) => (
+const KpiCard = ({ label, value, hint }) => (
   <Card className="p-5">
     <div className="flex items-start justify-between gap-4">
       <div>
@@ -16,7 +16,6 @@ const KpiCard = ({ label, value, hint, tone = 'info' }) => (
         <p className="mt-3 text-3xl font-semibold tracking-tight text-white">{value}</p>
         <p className="mt-2 text-sm leading-6 text-slate-500">{hint}</p>
       </div>
-      <Badge tone={tone}>Live</Badge>
     </div>
   </Card>
 );
@@ -56,7 +55,7 @@ export default function Dashboard() {
   if (errorMessage) {
     return (
       <div className="space-y-5">
-        <PageHeader eyebrow="Overview" title="Dashboard" description="Workspace health, link velocity, and recent performance." />
+        <PageHeader eyebrow="Dashboard" title="Workspace overview" description="Workspace health, link velocity, and recent performance." />
         <Card className="p-5">
           <p className="text-sm text-rose-200">{errorMessage}</p>
         </Card>
@@ -67,17 +66,17 @@ export default function Dashboard() {
   return (
     <div className="space-y-5">
       <PageHeader
-        eyebrow="Overview"
+        eyebrow="Dashboard"
         title="Dashboard"
         description="Track link performance, recent activity, and common workflows from one operations view."
         action={<Button as={Link} to="/links" size="lg">Create link</Button>}
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Total links" value={numberFormat.format(overview?.totalLinks ?? 0)} hint="Managed links in this workspace" tone="info" />
-        <KpiCard label="Total clicks" value={numberFormat.format(overview?.totalClicks ?? 0)} hint="Recorded redirects across all links" tone="success" />
-        <KpiCard label="Unique visitors" value={numberFormat.format(overview?.uniqueVisitors ?? 0)} hint="Distinct visitors identified from clicks" tone="violet" />
-        <KpiCard label="Top link" value={topLinkLabel} hint={overview?.topLink?.totalClicks ? `${numberFormat.format(overview.topLink.totalClicks)} clicks` : 'No link activity yet'} tone="warning" />
+        <KpiCard label="Total links" value={numberFormat.format(overview?.totalLinks ?? 0)} hint="Managed links in this workspace" />
+        <KpiCard label="Total clicks" value={numberFormat.format(overview?.totalClicks ?? 0)} hint="Recorded redirects across all links" />
+        <KpiCard label="Unique visitors" value={numberFormat.format(overview?.uniqueVisitors ?? 0)} hint="Distinct visitors identified from clicks" />
+        <KpiCard label="Top link" value={topLinkLabel} hint={overview?.topLink?.totalClicks ? `${numberFormat.format(overview.topLink.totalClicks)} clicks` : 'No link activity yet'} />
       </section>
 
       <div className="grid gap-5 xl:grid-cols-[1.45fr_0.55fr]">

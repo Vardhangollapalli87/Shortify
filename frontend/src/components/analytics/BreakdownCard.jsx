@@ -1,20 +1,15 @@
 export const BreakdownCard = ({ title, subtitle, items = [], accent = 'cyan' }) => {
-  const accentMap = {
-    cyan: 'from-cyan-400/10 to-cyan-400/0 border-cyan-400/20 text-cyan-100',
-    emerald: 'from-emerald-400/10 to-emerald-400/0 border-emerald-400/20 text-emerald-100',
-    violet: 'from-violet-400/10 to-violet-400/0 border-violet-400/20 text-violet-100',
-    amber: 'from-amber-400/10 to-amber-400/0 border-amber-400/20 text-amber-100'
-  };
+  const accentMap = { cyan: 'border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-300', emerald: 'border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300', violet: 'border-violet-200 text-violet-700 dark:border-violet-800 dark:text-violet-300', amber: 'border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300' };
 
   return (
-    <article className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 shadow-xl shadow-black/20">
+    <article className="app-panel rounded-lg border p-5 shadow-sm">
       <div className="mb-5 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">Breakdown</p>
-          <h3 className="mt-2 text-xl font-semibold text-white">{title}</h3>
+          <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">Breakdown</p>
+          <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">{title}</h3>
           <p className="mt-2 text-sm leading-6 text-slate-400">{subtitle}</p>
         </div>
-        <span className={`rounded-full border bg-gradient-to-r ${accentMap[accent] || accentMap.cyan} px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em]`}>{items.length} items</span>
+        <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${accentMap[accent] || accentMap.cyan}`}>{items.length} items</span>
       </div>
 
       <div className="space-y-3">
@@ -28,7 +23,7 @@ export const BreakdownCard = ({ title, subtitle, items = [], accent = 'cyan' }) 
                 <span className="text-slate-300">{item.count} clicks</span>
               </div>
               <div className="h-2 rounded-full bg-slate-800">
-                <div className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400" style={{ width: `${Math.min(item.percentage || 0, 100)}%` }} />
+                <div className="h-2 rounded-full bg-blue-600" style={{ width: `${Math.min(item.percentage || 0, 100)}%` }} />
               </div>
               <p className="mt-2 text-xs uppercase tracking-[0.14em] text-slate-500">{item.percentage ?? 0}% of traffic</p>
             </div>

@@ -18,14 +18,14 @@ const AnalyticsPage = lazy(() => import('./pages/Analytics'));
 const SettingsPage = lazy(() => import('./pages/Settings'));
 
 const PageLoader = () => (
-  <div className="grid min-h-screen place-items-center bg-slate-950 text-sm font-medium text-slate-300">Loading Shortify...</div>
+  <div className="grid min-h-screen place-items-center bg-white text-sm font-medium text-slate-600 dark:bg-slate-950 dark:text-slate-300">Loading Shortify...</div>
 );
 
 const RootRoute = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div className="grid min-h-screen place-items-center bg-slate-950 text-slate-200">Loading session...</div>;
+    return <div className="grid min-h-screen place-items-center bg-white text-slate-600 dark:bg-slate-950 dark:text-slate-200">Loading session...</div>;
   }
 
   if (user) {
@@ -97,7 +97,7 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-slate-200">Workspace overview placeholder.</div>} />
+        <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="links" element={<LinksPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="settings" element={<SettingsPage />} />

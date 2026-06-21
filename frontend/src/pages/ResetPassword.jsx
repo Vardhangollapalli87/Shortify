@@ -34,16 +34,16 @@ export default function ResetPassword() {
       <form className="space-y-4" onSubmit={onSubmit}>
         {!token ? <Alert tone="error">This reset link is missing a token. Request a new password reset email.</Alert> : null}
         <Field label="New password">
-          <div className="flex rounded-lg border border-slate-700 bg-slate-950 focus-within:border-cyan-400">
+          <div className="flex rounded-lg border border-slate-300 bg-white focus-within:border-blue-500 dark:border-slate-700 dark:bg-slate-950">
             <input
-              className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-slate-100 outline-none"
+              className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-slate-950 outline-none dark:text-slate-100"
               type={showPassword ? 'text' : 'password'}
               placeholder="New password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               required
             />
-            <button type="button" onClick={() => setShowPassword(!showPassword)} className="px-4 text-xs font-semibold text-cyan-200">
+            <button type="button" onClick={() => setShowPassword(!showPassword)} className="px-4 text-xs font-semibold text-blue-600 dark:text-blue-400" aria-label={`${showPassword ? 'Hide' : 'Show'} password`}>
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
@@ -54,7 +54,7 @@ export default function ResetPassword() {
           {status === 'loading' ? 'Resetting...' : 'Reset password'}
         </Button>
       </form>
-      <p className="mt-5 text-sm text-slate-400"><Link className="text-cyan-300 hover:text-cyan-100" to="/login">Back to sign in</Link></p>
+      <p className="mt-5 text-sm text-slate-600 dark:text-slate-400"><Link className="text-blue-600 hover:text-blue-700 dark:text-blue-400" to="/login">Back to sign in</Link></p>
     </AuthShell>
   );
 }

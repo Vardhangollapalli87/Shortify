@@ -2,7 +2,7 @@ const errorMessages = {
   INVALID_URL: 'Enter a valid URL that starts with http:// or https://.',
   INVALID_SHORT_CODE: 'Aliases can use 3-32 letters, numbers, underscores, or hyphens.',
   SHORT_CODE_RESERVED: 'That alias is reserved. Choose a different one.',
-  SHORT_CODE_ALREADY_EXISTS: 'That alias is already in use.',
+  SHORT_CODE_ALREADY_EXISTS: 'Alias already taken. Please choose another alias.',
   INVALID_EXPIRATION_DATE: 'Choose a future expiration date.',
   INVALID_CREDENTIALS: 'The email or password is incorrect.',
   AUTHENTICATION_REQUIRED: 'Please sign in to continue.',

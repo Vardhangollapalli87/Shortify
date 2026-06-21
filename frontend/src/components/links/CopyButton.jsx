@@ -19,7 +19,7 @@ export const CopyButton = ({ value, onCopy, onError }) => {
     <button
       type="button"
       onClick={copyToClipboard}
-      className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-100"
+      className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
       aria-label="Copy short URL"
     >
       {copied ? 'Copied' : 'Copy'}

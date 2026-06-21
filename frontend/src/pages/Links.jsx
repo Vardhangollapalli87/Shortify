@@ -205,26 +205,23 @@ export default function LinksPage() {
         <EmptyState
           title={links.length > 0 ? 'No links match your filters' : 'No links created yet'}
           description={links.length > 0 ? 'Adjust your search or filters to find another short link.' : 'Create your first short link to start tracking performance and managing your workspace.'}
-          action={links.length > 0 ? null : <Button type="button" onClick={() => setIsModalOpen(true)}>Create first link</Button>}
+          action={links.length > 0 ? null : <Button type="button" onClick={() => { setActiveLink(null); setIsModalOpen(true); }}>Create first link</Button>}
         />
       )}
 
       {detailLink ? (
-        <section className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 shadow-xl shadow-black/20">
+        <section className="app-panel rounded-lg border p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Details</p>
-              <h2 className="mt-2 text-2xl font-semibold text-white">/{detailLink.shortCode}</h2>
+              <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">Link details</p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">/{detailLink.shortCode}</h2>
               <p className="mt-2 break-all text-sm text-slate-300">{buildShortLink(detailLink.shortCode)}</p>
               <p className="mt-3 break-all text-sm text-slate-400">{detailLink.originalUrl}</p>
             </div>
             <Button type="button" onClick={() => setDetailLink(null)} variant="secondary">Close</Button>
           </div>
-          <div className="mt-5 grid gap-3 text-sm text-slate-300 md:grid-cols-4">
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">Clicks<br /><span className="text-xl font-semibold text-white">{detailLink.totalClicks || 0}</span></div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">Status<br /><span className="text-xl font-semibold text-white">{detailLink.isActive ? 'Active' : 'Inactive'}</span></div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">Protection<br /><span className="text-xl font-semibold text-white">{detailLink.isPasswordProtected ? 'Password' : 'None'}</span></div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">Expires<br /><span className="text-xl font-semibold text-white">{detailLink.expiresAt ? 'Scheduled' : 'Never'}</span></div>
+          <div className="mt-5 grid gap-3 text-sm text-slate-600 dark:text-slate-300 sm:grid-cols-2 xl:grid-cols-4">
+            {[["Clicks", detailLink.totalClicks || 0], ["Status", detailLink.isActive ? 'Active' : 'Inactive'], ["Protection", detailLink.isPasswordProtected ? 'Password' : 'None'], ["Expires", detailLink.expiresAt ? 'Scheduled' : 'Never']].map(([label, value]) => <div key={label} className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">{label}<br /><span className="mt-1 block text-lg font-semibold text-slate-950 dark:text-white">{value}</span></div>)}
           </div>
         </section>
       ) : null}

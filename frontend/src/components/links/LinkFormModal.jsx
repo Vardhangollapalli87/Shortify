@@ -107,15 +107,15 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-2xl rounded-3xl border border-slate-800 bg-slate-950 p-6 shadow-2xl shadow-black/40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+      <div className="app-panel max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-lg border p-6 shadow-xl" role="dialog" aria-modal="true" aria-labelledby="link-form-title">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">{mode}</p>
-            <h2 className="mt-2 text-2xl font-semibold text-white">{title}</h2>
+            <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">{mode}</p>
+            <h2 id="link-form-title" className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2>
             <p className="mt-2 text-sm text-slate-300">Create or update a short link with optional alias, expiry, and password protection.</p>
           </div>
-          <button type="button" onClick={onClose} className="rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 hover:border-slate-500">Close</button>
+          <button type="button" onClick={onClose} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" aria-label="Close link form">Close</button>
         </div>
 
         <form className="space-y-4" onSubmit={submit}>
@@ -168,8 +168,8 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-100">Cancel</button>
-            <button type="submit" className="rounded-xl bg-cyan-400 px-4 py-3 text-sm font-semibold text-slate-950">Save link</button>
+            <button type="button" onClick={onClose} className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">Cancel</button>
+            <button type="submit" className="rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">Save link</button>
           </div>
         </form>
       </div>

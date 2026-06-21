@@ -2,8 +2,8 @@ import { Card } from '../ui/Card';
 
 const MetricCard = ({ label, value, hint }) => (
   <Card className="p-5">
-    <p className="text-sm text-slate-400">{label}</p>
-    <p className="mt-3 text-3xl font-semibold tracking-tight text-white">{value}</p>
+    <p className="text-sm text-slate-600 dark:text-slate-400">{label}</p>
+    <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">{value}</p>
     <p className="mt-2 text-sm leading-6 text-slate-500">{hint}</p>
   </Card>
 );

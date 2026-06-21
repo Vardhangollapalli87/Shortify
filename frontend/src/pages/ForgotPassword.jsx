@@ -35,7 +35,7 @@ export default function ForgotPassword() {
         {message ? <Alert tone={status === 'success' ? 'success' : 'error'}>{message}</Alert> : null}
         <Button type="submit" className="w-full" disabled={status === 'loading'}>{status === 'loading' ? 'Sending...' : 'Send reset link'}</Button>
       </form>
-      <p className="mt-5 text-sm text-slate-400"><Link className="text-cyan-300 hover:text-cyan-100" to="/login">Back to sign in</Link></p>
+      <p className="mt-5 text-sm text-slate-600 dark:text-slate-400"><Link className="text-blue-600 hover:text-blue-700 dark:text-blue-400" to="/login">Back to sign in</Link></p>
     </AuthShell>
   );
 }

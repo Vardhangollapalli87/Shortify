@@ -15,10 +15,10 @@ const formatDate = (value) => {
 };
 
 export const LinkRow = ({ link, onEdit, onDelete, onToggle, onView, onQr, onCopy, onCopyError }) => (
-  <tr className="align-top text-sm text-slate-200 hover:bg-slate-800/45">
+  <tr className="align-top text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800/45">
     <td className="px-5 py-4">
       <div className="flex flex-col gap-1">
-        <span className="font-semibold text-cyan-100">/{link.shortCode}</span>
+        <span className="font-semibold text-blue-700 dark:text-blue-300">/{link.shortCode}</span>
         <span className="text-xs uppercase tracking-[0.14em] text-slate-500">{link.title || 'Untitled link'}</span>
       </div>
     </td>

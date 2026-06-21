@@ -37,7 +37,7 @@ export const QRCodeActions = ({ canvas, shortUrl, shortCode, onCopy, onCopyError
       <button
         type="button"
         onClick={downloadPng}
-        className="rounded-xl bg-cyan-400 px-4 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-400/10 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+        className="rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
         disabled={!canvas}
       >
         {downloadState === 'success' ? 'Downloaded' : downloadState === 'error' ? 'Unavailable' : 'Download PNG'}
@@ -45,14 +45,14 @@ export const QRCodeActions = ({ canvas, shortUrl, shortCode, onCopy, onCopyError
       <button
         type="button"
         onClick={copyShortUrl}
-        className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-400/40 hover:text-cyan-100"
+        className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:bg-slate-800"
       >
         {copyState === 'success' ? 'Copied' : copyState === 'error' ? 'Copy failed' : 'Copy short URL'}
       </button>
       <button
         type="button"
         onClick={onRegenerate}
-        className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-emerald-400/40 hover:text-emerald-100"
+        className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:bg-slate-800"
       >
         Regenerate
       </button>
