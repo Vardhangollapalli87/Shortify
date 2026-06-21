@@ -1,11 +1,11 @@
 export const StatusBadge = ({ isActive }) => (
   <span
-    className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] ${
+    className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
       isActive
-        ? 'border-emerald-500/30 bg-emerald-400/10 text-emerald-100'
-        : 'border-amber-500/30 bg-amber-400/10 text-amber-100'
+        ? 'border-green-200 bg-green-100 text-green-800 dark:border-green-900 dark:bg-green-900/30 dark:text-green-300'
+        : 'border-neutral-300 bg-neutral-200 text-neutral-700 dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-200'
     }`}
   >
-    {isActive ? 'Active' : 'Inactive'}
+    {isActive ? 'Active' : 'Disabled'}
   </span>
 );

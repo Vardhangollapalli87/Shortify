@@ -40,6 +40,10 @@ A production-grade URL Shortener SaaS platform built with Node.js, Express, Mong
 * Mobile navigation drawer and responsive link cards
 * Dashboard, analytics, links, QR, and account settings experiences
 * Compact link action menu with QR, edit, status, and delete controls
+* Real landing-page QR preview generated from the configured production URL
+* Enterprise footer with product, navigation, legal, and copyright sections
+* Theme-safe Active and Disabled status badges
+* Accessible analytics chart colors in light and dark modes
 
 ### Infrastructure
 

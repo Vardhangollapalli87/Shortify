@@ -315,6 +315,10 @@ Implemented:
 * Final dark mode uses a neutral ChatGPT-style palette: background `#171717`, surface `#212121`, card `#262626`, border `#333333`, primary text `#FAFAFA`, secondary text `#A3A3A3`, accent `#2563EB`.
 * Settings profile rendering uses deterministic initials instead of remote avatar URLs; profile photo support is displayed as coming soon until upload storage exists.
 * Links actions were simplified to Copy, View, and a More menu containing QR Code, Edit, Enable/Disable, and Delete.
+* Landing preview QR is generated with the existing QR utility from `VITE_PUBLIC_APP_URL`, `VITE_SHORT_LINK_BASE_URL`, or `https://shortify.app`.
+* Landing footer was upgraded into a compact enterprise SaaS footer with product links, legal links, and copyright.
+* Active and Disabled badges now use explicit semantic status tokens for both themes.
+* Analytics charts now use theme-aware axis labels, grid lines, data lines, tooltips, and empty states.
 * Added a class-based theme provider with browser-preference detection and `localStorage` persistence.
 * Added theme controls to the application navbar and authentication experience.
 * Reworked protected navigation into a fixed desktop sidebar and accessible mobile drawer.

@@ -12,6 +12,10 @@ Implemented:
 * Improved light-mode contrast for badges, pills, chart labels, QR controls, status indicators, and error states.
 * Replaced Settings avatar image rendering with deterministic initials and noted that profile photo support is coming soon.
 * Replaced crowded link action buttons with Copy, View, and a More menu for QR Code, Edit, Enable/Disable, and Delete.
+* Replaced the landing placeholder QR with a real QR canvas generated from the configured production URL or `https://shortify.app`.
+* Added a compact enterprise SaaS footer with product links, legal links, and copyright.
+* Added theme-safe Active and Disabled status badge tokens.
+* Improved analytics chart accessibility with theme-aware axes, grid lines, lines, tooltips, and empty states.
 * Added a fixed desktop sidebar and mobile drawer with outside-click and Escape-key dismissal.
 * Refined the landing page, removed fake metrics and unverified pricing, and improved product messaging.
 * Refined login and registration side panels with product previews and benefit-focused content.
