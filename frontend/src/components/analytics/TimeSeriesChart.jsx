@@ -6,14 +6,14 @@ export const TimeSeriesChart = ({ data = [] }) => (
       <div>
         <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">Trend</p>
         <h2 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">Clicks over time</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">A daily view of engagement for the selected short link.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Daily clicks for the selected short link.</p>
       </div>
       <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Current data</span>
     </div>
 
     <div className="h-80 w-full">
       {data.length === 0 ? (
-        <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-slate-700 bg-slate-950 text-center text-sm text-slate-400">No time-series data available for this link yet.</div>
+        <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-center text-sm text-slate-600 dark:border-[#333333] dark:bg-[#212121] dark:text-slate-300">No time-series data available for this link yet.</div>
       ) : (
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>

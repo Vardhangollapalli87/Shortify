@@ -12,7 +12,7 @@ const KpiCard = ({ label, value, hint }) => (
   <Card className="p-5">
     <div className="flex items-start justify-between gap-4">
       <div>
-        <p className="text-sm text-slate-400">{label}</p>
+    <p className="text-sm text-slate-600 dark:text-slate-400">{label}</p>
         <p className="mt-3 text-3xl font-semibold tracking-tight text-white">{value}</p>
         <p className="mt-2 text-sm leading-6 text-slate-500">{hint}</p>
       </div>
@@ -57,7 +57,7 @@ export default function Dashboard() {
       <div className="space-y-5">
         <PageHeader eyebrow="Dashboard" title="Workspace overview" description="Workspace health, link velocity, and recent performance." />
         <Card className="p-5">
-          <p className="text-sm text-rose-200">{errorMessage}</p>
+          <p className="text-sm text-red-700 dark:text-red-300">{errorMessage}</p>
         </Card>
       </div>
     );
@@ -129,7 +129,7 @@ export default function Dashboard() {
                 <tbody className="divide-y divide-slate-800">
                   {topLinks.slice(0, 6).map((link) => (
                     <tr key={link.id || link.shortCode}>
-                      <td className="py-4 pr-4 font-medium text-cyan-100">/{link.shortCode}</td>
+                      <td className="py-4 pr-4 font-medium text-blue-700 dark:text-blue-300">/{link.shortCode}</td>
                       <td className="max-w-[420px] truncate py-4 pr-4 text-slate-400">{link.originalUrl || 'Destination unavailable'}</td>
                       <td className="py-4 pr-4 text-right text-white">{numberFormat.format(link.totalClicks || 0)}</td>
                     </tr>

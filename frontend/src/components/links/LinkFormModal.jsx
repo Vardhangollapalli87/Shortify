@@ -123,12 +123,12 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
             <label className="space-y-2 text-sm text-slate-200">
               <span>Original URL</span>
               <input value={form.originalUrl} onChange={(event) => setForm({ ...form, originalUrl: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" placeholder="https://example.com" required />
-              {errors.originalUrl ? <span className="block text-xs text-rose-300">{errors.originalUrl}</span> : null}
+              {errors.originalUrl ? <span className="block text-xs text-red-600 dark:text-red-300">{errors.originalUrl}</span> : null}
             </label>
             <label className="space-y-2 text-sm text-slate-200">
               <span>Custom Alias</span>
               <input value={form.shortCode} onChange={(event) => setForm({ ...form, shortCode: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" placeholder="my-link" />
-              {errors.shortCode ? <span className="block text-xs text-rose-300">{errors.shortCode}</span> : null}
+              {errors.shortCode ? <span className="block text-xs text-red-600 dark:text-red-300">{errors.shortCode}</span> : null}
             </label>
           </div>
           <label className="space-y-2 text-sm text-slate-200">
@@ -140,7 +140,7 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
               <span>Expiration Date</span>
               <input type="datetime-local" value={form.expiresAt} onChange={(event) => setForm({ ...form, expiresAt: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" />
               <span className="block text-xs text-slate-400">{form.expiresAt ? `Local time: ${formatLocalDateTime(localDateTimeInputToIso(form.expiresAt))}` : 'No expiration set'}</span>
-              {errors.expiresAt ? <span className="block text-xs text-rose-300">{errors.expiresAt}</span> : null}
+              {errors.expiresAt ? <span className="block text-xs text-red-600 dark:text-red-300">{errors.expiresAt}</span> : null}
             </label>
             <label className="space-y-2 text-sm text-slate-200">
               <span>Password Protection</span>
@@ -163,7 +163,7 @@ export const LinkFormModal = ({ isOpen, mode = 'create', link, onClose, onSubmit
               {(mode === 'create' || form.passwordMode === 'set') ? (
                 <input type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" placeholder="Optional password" />
               ) : null}
-              {errors.password ? <span className="block text-xs text-rose-300">{errors.password}</span> : null}
+              {errors.password ? <span className="block text-xs text-red-600 dark:text-red-300">{errors.password}</span> : null}
             </label>
           </div>
 

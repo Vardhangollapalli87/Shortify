@@ -301,12 +301,16 @@ The frontend uses a shared semantic presentation layer without changing applicat
 
 - `ThemeProvider` initializes from `localStorage` or `prefers-color-scheme`, then applies a root `.dark` class.
 - CSS variables in `frontend/src/index.css` define background, surface, border, text, muted, and primary colors for both themes.
+- Final dark mode uses neutral SaaS tokens: background `#171717`, surface `#212121`, card `#262626`, border `#333333`, primary text `#FAFAFA`, secondary text `#A3A3A3`, and accent `#2563EB`.
 - Shared UI primitives own card, button, form, feedback, page-header, and modal consistency.
 - `ProtectedLayout` owns mobile drawer state; the sidebar remains fixed on desktop and becomes an overlay drawer below the desktop breakpoint.
 - Route-level lazy loading keeps dashboard, links, analytics, settings, and public pages in separate frontend chunks.
 - Page components continue to consume existing React Query hooks, AuthProvider state, Axios services, analytics data, and QR utilities unchanged.
 - Toasts provide non-blocking success, error, warning, and information feedback; API errors continue through the centralized error mapper.
 - Responsive layouts stack at mobile widths, links use dedicated mobile cards, and wide data tables are only rendered at desktop sizes.
+- Settings renders deterministic initials avatars and keeps profile photo upload marked as coming soon until a storage-backed upload API exists.
+- Link rows expose Copy, View, and a More menu; the menu contains QR Code, Edit, Enable/Disable, and Delete actions without changing link service calls.
+- QR code management remains a dedicated frontend modal with preview, PNG download, copy-link, and close controls.
 
 Accessibility decisions:
 

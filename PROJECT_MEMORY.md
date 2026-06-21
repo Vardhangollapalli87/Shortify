@@ -311,7 +311,10 @@ Phase 7 - Professional SaaS UI Refinement ✅
 
 Implemented:
 
-* Replaced the dark-first cyan glow treatment with a restrained light/dark SaaS design system.
+* Replaced the dark-first glow treatment with a restrained light/dark SaaS design system.
+* Final dark mode uses a neutral ChatGPT-style palette: background `#171717`, surface `#212121`, card `#262626`, border `#333333`, primary text `#FAFAFA`, secondary text `#A3A3A3`, accent `#2563EB`.
+* Settings profile rendering uses deterministic initials instead of remote avatar URLs; profile photo support is displayed as coming soon until upload storage exists.
+* Links actions were simplified to Copy, View, and a More menu containing QR Code, Edit, Enable/Disable, and Delete.
 * Added a class-based theme provider with browser-preference detection and `localStorage` persistence.
 * Added theme controls to the application navbar and authentication experience.
 * Reworked protected navigation into a fixed desktop sidebar and accessible mobile drawer.

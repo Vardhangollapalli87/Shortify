@@ -43,7 +43,7 @@ export default function AnalyticsPage() {
     return (
       <div className="space-y-5">
         <PageHeader eyebrow="Analytics" title="Analytics overview" description="We are unable to load analytics for this workspace right now." />
-        <Card className="p-5 text-sm text-rose-200">{errorMessage}</Card>
+        <Card className="p-5 text-sm text-red-700 dark:text-red-300">{errorMessage}</Card>
       </div>
     );
   }
@@ -71,7 +71,7 @@ export default function AnalyticsPage() {
 
       <div className="grid gap-5 xl:grid-cols-[1.5fr_1fr]">
         <TimeSeriesChart data={analytics.timeseries} />
-        <BreakdownCard title="Top browsers" subtitle="How visitors reached this link by browser family" items={analytics.browsers} accent="cyan" />
+        <BreakdownCard title="Top browsers" subtitle="Browser families used by visitors" items={analytics.browsers} accent="blue" />
       </div>
 
       <div className="grid gap-5 xl:grid-cols-2">
@@ -81,7 +81,7 @@ export default function AnalyticsPage() {
 
       <div className="grid gap-5 xl:grid-cols-2">
         <BreakdownCard title="Referrers" subtitle="Sources that sent visitors to this short link" items={analytics.referrers} accent="amber" />
-        <BreakdownCard title="Countries" subtitle="Geographic distribution of clicks" items={analytics.countries} accent="cyan" />
+        <BreakdownCard title="Countries" subtitle="Geographic distribution of clicks" items={analytics.countries} accent="blue" />
       </div>
     </div>
   );

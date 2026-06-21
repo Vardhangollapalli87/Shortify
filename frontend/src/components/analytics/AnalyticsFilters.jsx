@@ -4,7 +4,7 @@ export const AnalyticsFilters = ({ links = [], selectedLinkId, onSelect }) => (
       <div>
         <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">Filter</p>
         <h2 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">Focus the analytics view</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">Select a short link to inspect engagement, audience mix, and traffic changes.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Select a short link to inspect engagement, audience mix, and traffic changes.</p>
       </div>
 
       <label className="flex flex-col gap-2 text-sm text-slate-700 dark:text-slate-200 lg:w-80">

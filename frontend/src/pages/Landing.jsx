@@ -100,12 +100,12 @@ export default function Landing() {
 
       <section className="mx-auto grid max-w-7xl gap-5 px-5 py-10 lg:grid-cols-2">
         <div className="app-panel rounded-lg border p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">Analytics</p>
+          <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">Analytics</p>
           <h2 className="mt-3 text-2xl font-semibold text-white">See what every redirect is doing.</h2>
           <p className="mt-3 text-sm leading-6 text-slate-400">Break down link performance by time, geography, browser, device, operating system, and referrer.</p>
         </div>
         <div className="app-panel rounded-lg border p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">QR workflow</p>
+          <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">QR workflow</p>
           <h2 className="mt-3 text-2xl font-semibold text-white">Generate QR assets where links live.</h2>
           <p className="mt-3 text-sm leading-6 text-slate-400">Preview, regenerate, download, and copy short URLs from the same management table.</p>
         </div>

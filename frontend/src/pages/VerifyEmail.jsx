@@ -60,30 +60,30 @@ export default function VerifyEmail() {
         : 'Verify your email';
 
   return (
-    <main className="grid min-h-screen place-items-center px-6 py-16 text-slate-100">
-      <div className="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900/80 p-8 shadow-2xl shadow-black/30">
-        <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Account security</p>
-        <h1 className="mt-3 text-3xl font-semibold">{title}</h1>
+    <main className="grid min-h-screen place-items-center bg-white px-6 py-16 text-slate-950 dark:bg-[#171717] dark:text-slate-100">
+      <div className="app-panel w-full max-w-md rounded-lg border p-8 shadow-sm">
+        <p className="text-xs font-semibold uppercase text-blue-600 dark:text-blue-400">Account security</p>
+        <h1 className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">{title}</h1>
 
         {status === 'verifying' ? (
-          <p className="mt-4 text-sm text-slate-300">Checking your verification link...</p>
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">Checking your verification link...</p>
         ) : null}
 
         {message ? (
-          <p className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${status === 'success' || resendStatus === 'success' ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100' : 'border-rose-400/30 bg-rose-400/10 text-rose-100'}`}>
+          <p className={`mt-4 rounded-lg border px-4 py-3 text-sm ${status === 'success' || resendStatus === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-200' : 'border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200'}`}>
             {message}
           </p>
         ) : null}
 
         {status === 'success' ? (
-          <Link to="/dashboard" className="mt-6 block rounded-xl bg-cyan-400 px-4 py-3 text-center font-semibold text-slate-950">
+          <Link to="/dashboard" className="mt-6 block rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white hover:bg-blue-700">
             Continue to dashboard
           </Link>
         ) : (
           <form className="mt-6 space-y-4" onSubmit={resendVerification}>
-            <p className="text-sm text-slate-300">Enter your account email and we will send a fresh verification link.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300">Enter your account email and we will send a fresh verification link.</p>
             <input
-              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100"
+              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-950 dark:border-[#333333] dark:bg-[#212121] dark:text-slate-100"
               type="email"
               placeholder="Email"
               value={email}
@@ -93,15 +93,15 @@ export default function VerifyEmail() {
             <button
               type="submit"
               disabled={resendStatus === 'loading'}
-              className="w-full rounded-xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {resendStatus === 'loading' ? 'Sending...' : 'Resend verification email'}
             </button>
           </form>
         )}
 
-        <p className="mt-4 text-sm text-slate-300">
-          Already verified? <Link className="text-cyan-300" to="/login">Sign in</Link>
+        <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
+          Already verified? <Link className="text-blue-600 dark:text-blue-400" to="/login">Sign in</Link>
         </p>
       </div>
     </main>

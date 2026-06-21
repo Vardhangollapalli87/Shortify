@@ -7,7 +7,11 @@ Status: Complete
 Implemented:
 
 * Added persistent light and dark themes with first-visit browser preference detection.
-* Replaced cyan glow, radial backgrounds, and excessive gradients with restrained neutral surfaces and blue actions.
+* Replaced bright glow, radial backgrounds, and excessive gradients with neutral surfaces and blue actions.
+* Updated dark mode to a ChatGPT-style neutral palette: `#171717`, `#212121`, `#262626`, and `#333333`.
+* Improved light-mode contrast for badges, pills, chart labels, QR controls, status indicators, and error states.
+* Replaced Settings avatar image rendering with deterministic initials and noted that profile photo support is coming soon.
+* Replaced crowded link action buttons with Copy, View, and a More menu for QR Code, Edit, Enable/Disable, and Delete.
 * Added a fixed desktop sidebar and mobile drawer with outside-click and Escape-key dismissal.
 * Refined the landing page, removed fake metrics and unverified pricing, and improved product messaging.
 * Refined login and registration side panels with product previews and benefit-focused content.

@@ -45,6 +45,16 @@ const strengthLabel = (checks) => {
 
 const canUsePassword = (authProvider) => authProvider === 'credentials' || authProvider === 'mixed';
 
+const getInitials = (profile) => {
+  const source = profile?.name || profile?.email || 'Shortify User';
+  const parts = source
+    .replace(/@.*/, '')
+    .split(/[\s._-]+/)
+    .filter(Boolean);
+
+  return parts.slice(0, 2).map((part) => part[0]?.toUpperCase()).join('') || 'SU';
+};
+
 const PasswordInput = ({ label, value, onChange, visible, onToggle }) => (
   <Field label={label}>
     <div className="flex rounded-lg border border-slate-300 bg-white focus-within:border-blue-500 dark:border-slate-700 dark:bg-slate-950">
@@ -66,7 +76,7 @@ export default function SettingsPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user: authUser, logout } = useAuth();
-  const [profileForm, setProfileForm] = useState({ name: '', avatarUrl: '' });
+  const [profileForm, setProfileForm] = useState({ name: '' });
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [showPasswords, setShowPasswords] = useState({ current: false, next: false, confirm: false });
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -82,10 +92,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (profile) {
-      setProfileForm({
-        name: profile.name || '',
-        avatarUrl: profile.avatarUrl || ''
-      });
+      setProfileForm({ name: profile.name || '' });
     }
   }, [profile]);
 
@@ -94,7 +101,7 @@ export default function SettingsPage() {
   const passwordStrength = strengthLabel(checks);
   const passwordEnabled = canUsePassword(activeProfile?.authProvider);
   const confirmationMatches = deleteConfirmation === 'DELETE';
-  const initials = activeProfile?.name?.slice(0, 1)?.toUpperCase() || activeProfile?.email?.slice(0, 1)?.toUpperCase() || 'S';
+  const initials = getInitials(activeProfile);
 
   const showToast = (message, tone = 'success') => {
     setToast({ message, tone });
@@ -139,8 +146,7 @@ export default function SettingsPage() {
     }
 
     profileMutation.mutate({
-      name: profileForm.name,
-      avatarUrl: profileForm.avatarUrl
+      name: profileForm.name
     });
   };
 
@@ -183,11 +189,10 @@ export default function SettingsPage() {
           <CardBody>
             <div className="flex flex-col gap-6 lg:flex-row">
               <div className="shrink-0">
-                <div className="grid h-24 w-24 place-items-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 text-3xl font-semibold text-blue-700 dark:border-slate-700 dark:bg-slate-950 dark:text-blue-300">
-                  {activeProfile?.avatarUrl ? <img src={activeProfile.avatarUrl} alt={`${activeProfile?.name || 'User'} profile`} className="h-full w-full object-cover" /> : initials}
+                <div className="grid h-24 w-24 place-items-center rounded-full border border-slate-200 bg-slate-100 text-3xl font-semibold text-blue-700 dark:border-slate-700 dark:bg-slate-950 dark:text-blue-300" aria-label="Profile initials">
+                  {initials}
                 </div>
-                <Button type="button" variant="subtle" size="sm" className="mt-3" disabled title="Photo uploads are coming soon">Upload photo</Button>
-                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Coming Soon</p>
+                <p className="mt-3 max-w-40 text-xs leading-5 text-slate-600 dark:text-slate-400">Profile photo support coming soon.</p>
               </div>
               <div className="min-w-0 flex-1">
                 {isEditingProfile ? (
@@ -196,7 +201,7 @@ export default function SettingsPage() {
                     <div className="flex flex-wrap gap-3">
                       <Button type="submit" disabled={profileMutation.isPending}>{profileMutation.isPending ? 'Saving...' : 'Save changes'}</Button>
                       <Button type="button" variant="secondary" onClick={() => {
-                        setProfileForm({ name: activeProfile?.name || '', avatarUrl: activeProfile?.avatarUrl || '' });
+                        setProfileForm({ name: activeProfile?.name || '' });
                         setIsEditingProfile(false);
                       }}>Cancel</Button>
                     </div>

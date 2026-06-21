@@ -12,7 +12,7 @@ export const TopLinksTable = ({ links }) => (
   <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/20">
     <div className="mb-6 flex items-center justify-between gap-4">
       <div>
-        <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Top links</p>
+        <p className="text-sm uppercase text-blue-600 dark:text-blue-400">Top links</p>
         <h2 className="mt-2 text-xl font-semibold text-white">Your strongest performing short links</h2>
       </div>
       <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1 text-xs uppercase tracking-[0.3em] text-slate-300">Top 10</span>
@@ -31,7 +31,7 @@ export const TopLinksTable = ({ links }) => (
         <tbody className="divide-y divide-slate-800 bg-slate-900/70">
           {links.map((link) => (
             <tr key={link.id} className="hover:bg-slate-800/70">
-              <td className="px-4 py-4 font-semibold text-cyan-100">/{link.shortCode}</td>
+              <td className="px-4 py-4 font-semibold text-blue-700 dark:text-blue-300">/{link.shortCode}</td>
               <td className="max-w-xs px-4 py-4 text-slate-300">{link.originalUrl}</td>
               <td className="px-4 py-4 text-white">{link.totalClicks}</td>
               <td className="px-4 py-4 text-slate-300">{formatDate(link.createdAt)}</td>
