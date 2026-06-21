@@ -295,6 +295,27 @@ Approved indexes for the `clicks` collection:
 
 ## Current Status
 
+### Phase 7 Frontend Experience
+
+The frontend uses a shared semantic presentation layer without changing application service boundaries:
+
+- `ThemeProvider` initializes from `localStorage` or `prefers-color-scheme`, then applies a root `.dark` class.
+- CSS variables in `frontend/src/index.css` define background, surface, border, text, muted, and primary colors for both themes.
+- Shared UI primitives own card, button, form, feedback, page-header, and modal consistency.
+- `ProtectedLayout` owns mobile drawer state; the sidebar remains fixed on desktop and becomes an overlay drawer below the desktop breakpoint.
+- Route-level lazy loading keeps dashboard, links, analytics, settings, and public pages in separate frontend chunks.
+- Page components continue to consume existing React Query hooks, AuthProvider state, Axios services, analytics data, and QR utilities unchanged.
+- Toasts provide non-blocking success, error, warning, and information feedback; API errors continue through the centralized error mapper.
+- Responsive layouts stack at mobile widths, links use dedicated mobile cards, and wide data tables are only rendered at desktop sizes.
+
+Accessibility decisions:
+
+- Visible `focus-visible` outlines are applied globally.
+- Navigation drawers expose dialog semantics, labeled controls, outside-click dismissal, and Escape-key dismissal.
+- Modals expose dialog labels and backdrop dismissal.
+- Theme, menu, password visibility, QR, and copy controls have accessible names.
+- Reduced-motion preferences suppress nonessential transitions and animations.
+
 Phase 1 Complete
 Phase 2 Complete
 Phase 3 Complete
